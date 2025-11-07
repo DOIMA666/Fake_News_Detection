@@ -11,7 +11,7 @@ const FakeNewsChecker = () => {
   const [showResult, setShowResult] = useState(false);
 
   
-  const API_URL = 'https://fake-news-detection-u01j.onrender.com';
+  const API_URL = 'https://kiyo024-Kiyo_space.hf.space/api/check';
 
   //const API_URL = 'http://localhost:8000';
 
