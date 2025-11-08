@@ -5,6 +5,7 @@ from typing import Optional, Literal
 from fact_checker import FactChecker
 import uvicorn
 import os
+from fastapi.responses import JSONResponse
 
 # Initialize FastAPI app
 app = FastAPI(

@@ -6,8 +6,11 @@ from bs4 import BeautifulSoup
 from collections import Counter
 import logging
 from typing import List, Dict, Optional, Tuple
+from urllib.parse import urlparse, quote_plus
+import random
+import time
 
-# PhoBERT & NLP imports
+
 try:
     from transformers import AutoTokenizer, AutoModel
     from keybert import KeyBERT
