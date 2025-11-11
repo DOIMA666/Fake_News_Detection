@@ -1,16 +1,16 @@
 import re
 import unicodedata
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote_plus
 import requests
 from bs4 import BeautifulSoup
 from collections import Counter
 import logging
 from typing import List, Dict, Optional, Tuple
-from urllib.parse import urlparse, quote_plus
 import random
 import time
+from curl_cffi import requests as cffi_requests
 
-
+# PhoBERT & NLP imports
 try:
     from transformers import AutoTokenizer, AutoModel
     from keybert import KeyBERT
@@ -38,7 +38,7 @@ class TextPreprocessor:
         if self.use_phobert:
             self._init_phobert()
         
-        logger.info(f"✅ Preprocessor initialized (PhoBERT: {self.use_phobert})")
+        logger.info(f"Preprocessor initialized (PhoBERT: {self.use_phobert})")
     
     def _init_phobert(self):
         try:
@@ -52,14 +52,13 @@ class TextPreprocessor:
             
             self.kw_model = KeyBERT(model=self.phobert_model)
             
-            logger.info(f"✅ PhoBERT loaded successfully! (Model: {model_name})")
+            logger.info(f"PhoBERT loaded successfully! (Model: {model_name})")
             
         except Exception as e:
             logger.error(f"Failed to load PhoBERT: {e}")
             self.use_phobert = False
     
     def _load_stopwords(self):
-
         return set([
             'và', 'hoặc', 'của', 'có', 'được', 'đã', 'đang', 'sẽ',
             'này', 'đó', 'kia', 'các', 'những', 'cho', 'từ', 'với',
@@ -73,7 +72,6 @@ class TextPreprocessor:
         ])
     
     def normalize_text(self, text: str) -> str:
-
         if not text:
             return ""
         
@@ -96,7 +94,6 @@ class TextPreprocessor:
         return tokens
 
     def extract_title_from_text(self, text: str) -> str:
-        
         if self.use_phobert:
             try:
                 sentences = sent_tokenize(text)
@@ -130,7 +127,6 @@ class TextPreprocessor:
     
     def extract_keywords_phobert(self, text: str, top_n: int = 15) -> List[str]:
         try:
-
             keywords = self.kw_model.extract_keywords(
                 text,
                 keyphrase_ngram_range=(1, 2),  
@@ -147,7 +143,6 @@ class TextPreprocessor:
             return []
     
     def extract_keywords_basic(self, text: str, top_n: int = 15) -> List[str]:
-
         normalized = self.normalize_text(text)
         tokens = self.simple_tokenize(normalized)
         
@@ -170,18 +165,16 @@ class TextPreprocessor:
         return keywords
     
     def extract_keywords(self, text: str, top_n: int = 15) -> List[str]:
-        
         if self.use_phobert:
             phobert_kws = self.extract_keywords_phobert(text, top_n)
             if phobert_kws:
-                logger.info(f"✅ Extracted {len(phobert_kws)} keywords via PhoBERT/KeyBERT")
+                logger.info(f"Extracted {len(phobert_kws)} keywords via PhoBERT/KeyBERT")
                 return phobert_kws
         
         logger.info("Using basic keyword extraction (fallback)")
         return self.extract_keywords_basic(text, top_n)
     
     def extract_named_entities(self, text: str) -> List[Tuple[str, str]]:
-        
         if not self.use_phobert:
             return []
         
@@ -216,9 +209,7 @@ class TextPreprocessor:
         
         return unique_numbers[:3]
 
-
     def is_valid_article_url(self, url):
-        
         invalid_patterns = [
             '/topic/', '/category/', '/tag/', '/search', '/tim-kiem',
             '/video/', '/podcast/', '/page/', '/chu-de/', '/folder/',
@@ -238,64 +229,166 @@ class TextPreprocessor:
         if not self.is_valid_article_url(url):
             logger.warning(f"URL may not be a valid article: {url}")
         
+        result = self._try_requests_method(url)
+        if result:
+            return result
+        
+        logger.warning("Method 1 failed, trying archive.org proxy...")
+        result = self._try_archive_method(url)
+        if result:
+            return result
+        
+        logger.warning("Method 2 failed, trying search snippet extraction...")
+        result = self._try_search_snippet_method(url)
+        if result:
+            return result
+        
+        logger.error("All extraction methods failed")
+        return None
+    
+    def _try_requests_method(self, url, max_retries=3):
+        
+        user_agents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+        ]
+        
+        for attempt in range(max_retries):
+            try:
+                logger.info(f"Attempt {attempt + 1}/{max_retries}: Extracting from {url} using curl_cffi")
+                
+                # Bộ headers đơn giản mà chúng ta đã thống nhất
+                headers = {
+                    'User-Agent': random.choice(user_agents),
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',
+                }
+                
+                domain = urlparse(url).netloc
+                if 'vnexpress.net' in domain:
+                    headers['Referer'] = 'https://www.google.com/search?q=vnexpress'
+                
+                # === THAY ĐỔI QUAN TRỌNG ===
+                # Dùng cffi_requests.get và giả mạo (impersonate) làm Chrome 120
+                # Đây là cách để vượt qua lỗi 406 do WAF phát hiện fingerprint
+                response = cffi_requests.get(
+                    url, 
+                    headers=headers, 
+                    timeout=30, 
+                    allow_redirects=True,
+                    verify=True,
+                    impersonate="chrome120"  # Dòng này là chìa khóa
+                )
+                # === KẾT THÚC THAY ĐỔI ===
+                
+                # response của cffi_requests có các thuộc tính giống hệt requests
+                if response.status_code == 200:
+                    # Dùng .content thay vì .text để BeautifulSoup tự xử lý encoding
+                    soup = BeautifulSoup(response.content, 'html.parser') 
+                    
+                    for tag in soup(["script", "style", "iframe", "noscript", "nav", "footer", "header"]):
+                        tag.decompose()
+                    
+                    title = self._extract_title(soup)
+                    description = self._extract_description(soup)
+                    content = self._extract_content(soup, url)
+                    
+                    if content and len(content) > 100:
+                        logger.info(f"Successfully extracted {len(content)} characters (via curl_cffi)")
+                        return {
+                            'title': self.normalize_text(title),
+                            'description': self.normalize_text(description),
+                            'content': self.normalize_text(content),
+                            'url': url,
+                            'domain': domain
+                        }
+                
+                logger.warning(f"Attempt {attempt + 1} failed: Status {response.status_code}")
+                
+            except Exception as e:
+                # Lỗi 406 từ cffi_requests thường sẽ raise exception
+                logger.warning(f"Attempt {attempt + 1} failed: {str(e)}")
+            
+            # Wait before retry
+            if attempt < max_retries - 1:
+                time.sleep(random.uniform(2, 5))
+        
+        return None
+    
+    def _try_archive_method(self, url):
+        
         try:
-            logger.info(f"Extracting content from: {url}")
+            
+            archive_api = f"http://archive.org/wayback/available?url={url}"
+            response = requests.get(archive_api, timeout=10)
+            data = response.json()
+            
+            if 'archived_snapshots' in data and 'closest' in data['archived_snapshots']:
+                archive_url = data['archived_snapshots']['closest']['url']
+                logger.info(f"Found archive.org snapshot: {archive_url}")
+                
+                archive_response = requests.get(archive_url, timeout=30)
+                if archive_response.status_code == 200:
+                    soup = BeautifulSoup(archive_response.content, 'html.parser')
+                    
+                    for tag in soup(["script", "style", "iframe", "noscript", "nav", "footer", "header"]):
+                        tag.decompose()
+                    
+                    title = self._extract_title(soup)
+                    description = self._extract_description(soup)
+                    content = self._extract_content(soup, url)
+                    
+                    if content and len(content) > 100:
+                        logger.info(f"✅ Archive.org extraction successful: {len(content)} chars")
+                        return {
+                            'title': self.normalize_text(title),
+                            'description': self.normalize_text(description),
+                            'content': self.normalize_text(content),
+                            'url': url,
+                            'domain': urlparse(url).netloc
+                        }
+        except Exception as e:
+            logger.warning(f"Archive.org method failed: {str(e)}")
+        
+        return None
+    
+    def _try_search_snippet_method(self, url):
+        try:
+            search_query = f"site:{urlparse(url).netloc} {url.split('/')[-1].replace('-', ' ')}"
+            search_url = f"https://www.google.com/search?q={quote_plus(search_query)}"
             
             headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-            'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1',
-            'Sec-Fetch-Dest': 'document',
-            'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-Site': 'none',
-            'Sec-Fetch-User': '?1',
-            'Cache-Control': 'max-age=0',
-            'DNT': '1'
-        }
-            
-            response = requests.get(url, headers=headers, timeout=30, allow_redirects=True)
-            response.raise_for_status()
-            
-            logger.info(f"HTTP Status: {response.status_code}")
-            
-            soup = BeautifulSoup(response.content, 'html.parser')
-            
-            for tag in soup(["script", "style", "iframe", "noscript", "nav", "footer", "header"]):
-                tag.decompose()
-            
-            title = self._extract_title(soup)
-            logger.info(f"Title extracted: {title[:100]}...")
-            
-            description = self._extract_description(soup)
-            
-            content = self._extract_content(soup, url)
-            
-            if not content or len(content) < 100:
-                logger.error(f"Content too short: {len(content)} characters")
-                return None
-            
-            logger.info(f"Successfully extracted {len(content)} characters")
-            
-            return {
-                'title': self.normalize_text(title),
-                'description': self.normalize_text(description),
-                'content': self.normalize_text(content),
-                'url': url,
-                'domain': urlparse(url).netloc
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
             }
             
-        except requests.exceptions.Timeout:
-            logger.error(f"Timeout while fetching {url}")
-            return None
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Request failed: {str(e)}")
-            return None
+            response = requests.get(search_url, headers=headers, timeout=10)
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            search_divs = soup.find_all('div', class_='g')
+            for div in search_divs:
+                link = div.find('a', href=True)
+                if link and url in link['href']:
+                    title_elem = div.find('h3')
+                    title = title_elem.get_text(strip=True) if title_elem else ""
+                    
+                    snippet_elem = div.find(['div', 'span'], class_=re.compile('VwiC3b|s3v9rd'))
+                    snippet = snippet_elem.get_text(strip=True) if snippet_elem else ""
+                    
+                    if title and snippet and len(snippet) > 100:
+                        logger.info(f"Search snippet extraction successful")
+                        return {
+                            'title': self.normalize_text(title),
+                            'description': '',
+                            'content': self.normalize_text(snippet),
+                            'url': url,
+                            'domain': urlparse(url).netloc
+                        }
         except Exception as e:
-            logger.error(f"Unexpected error: {type(e).__name__} - {str(e)}")
-            return None
+            logger.warning(f"Search snippet method failed: {str(e)}")
+        
+        return None
     
     def _extract_title(self, soup):
         title = ""
@@ -316,7 +409,6 @@ class TextPreprocessor:
         return title
     
     def _extract_description(self, soup):
-        
         description = ""
         meta_desc = soup.find('meta', attrs={'name': 'description'})
         if not meta_desc:
@@ -328,7 +420,6 @@ class TextPreprocessor:
         return description
     
     def _extract_content(self, soup, url):
-        
         content = ""
         domain = urlparse(url).netloc
         
@@ -364,13 +455,11 @@ class TextPreprocessor:
         return content
     
     def _extract_paragraphs(self, element):
-        
         paragraphs = element.find_all('p')
         texts = [p.get_text().strip() for p in paragraphs if len(p.get_text().strip()) > 30]
         return ' '.join(texts)
     
     def _extract_domain_specific(self, soup, domain):
-        
         content = ""
         
         if 'vnexpress.net' in domain:
@@ -401,29 +490,27 @@ class TextPreprocessor:
 
     def process_input(self, input_data: str, input_type: str = 'text') -> Optional[Dict]:
         if input_type == 'url':
-
             logger.info(f"Processing URL: {input_data}")
             return self._process_url(input_data)
         
         else:  
-
             logger.info(f"Processing text: {len(input_data)} characters")
             
             normalized = self.normalize_text(input_data)
             
             extracted_title = ""  
-            logger.info("📝 Input type is 'text', skipping title extraction.")
+            logger.info("Input type is 'text', skipping title extraction.")
 
             keywords = self.extract_keywords(normalized, top_n=15)
-            logger.info(f"🔑 Keywords: {keywords[:10]}")
+            logger.info(f"Keywords: {keywords[:10]}")
             
             entities = self.extract_named_entities(input_data)
             if entities:
-                logger.info(f"👤 Entities: {entities[:5]}")
+                logger.info(f"Entities: {entities[:5]}")
             
             numbers = self.extract_numbers_from_text(input_data)
             if numbers:
-                logger.info(f"🔢 Numbers: {numbers}")
+                logger.info(f"Numbers: {numbers}")
             
             if entities:
                 entity_words = [e[0] for e in entities[:5]]
@@ -442,7 +529,6 @@ class TextPreprocessor:
             }
 
     def _process_url(self, url: str) -> Optional[Dict]:
-        
         extracted = self.extract_from_url(url)
         if not extracted:
             logger.error("Failed to extract content from URL")
@@ -453,15 +539,15 @@ class TextPreprocessor:
         logger.info(f"Extracted {len(full_text)} characters from URL")
         
         keywords = self.extract_keywords(full_text, top_n=15)
-        logger.info(f"🔑 Keywords: {keywords[:10]}")
+        logger.info(f"Keywords: {keywords[:10]}")
 
         entities = self.extract_named_entities(full_text)
         if entities:
-            logger.info(f"👤 Entities: {entities[:5]}")
+            logger.info(f"Entities: {entities[:5]}")
             
         numbers = self.extract_numbers_from_text(full_text)
         if numbers:
-            logger.info(f"🔢 Numbers: {numbers}")
+            logger.info(f"Numbers: {numbers}")
 
         if entities:
             entity_words = [e[0] for e in entities[:5]]

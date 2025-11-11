@@ -106,7 +106,6 @@ async def check_fact(request: FactCheckRequest):
         print(f"  Content: {request.content[:100]}...")
         print(f"{'='*60}\n")
         
-        # Chạy fact checking
         result = fact_checker.check_fact(
             user_input=request.content,
             input_type=request.input_type,
@@ -115,7 +114,6 @@ async def check_fact(request: FactCheckRequest):
         
         print(f"\n[API] Result status: {result['status']}")
         
-        # Format kết quả cho frontend
         formatted_result = fact_checker.format_result_for_frontend(result)
         
         return formatted_result
@@ -173,16 +171,14 @@ async def internal_error_handler(request, exc):
         "detail": str(exc)
     }
 
-# Main entry point
 if __name__ == "__main__":
-    # Get port from environment variable (for deployment) or use 8000
+    
     port = int(os.environ.get("PORT", 8000))
     
-    # Chạy server
     uvicorn.run(
         "api:app",
         host="0.0.0.0",
         port=port,
-        reload=False,  # Disable reload in production
+        reload=False,  
         log_level="info"
     )
