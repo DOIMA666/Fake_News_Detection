@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, CheckCircle, Search, ExternalLink, Globe, FileText, Sparkles, Shield, TrendingUp, Info, Zap, Award } from 'lucide-react';
 
@@ -11,8 +12,8 @@ const FakeNewsChecker = () => {
   const [showResult, setShowResult] = useState(false);
 
   
-  const API_URL = 'https://Nhom05TLCN-Fake-News-detection.hf.space';
-  //const API_URL = 'http://localhost:8000';
+  //const API_URL = 'https://Nhom05TLCN-Fake-News-detection.hf.space';
+  const API_URL = 'http://localhost:8000';
 
   useEffect(() => {
     if (loading) {
@@ -63,7 +64,28 @@ const FakeNewsChecker = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.detail || 'Có lỗi xảy ra');
+        // Xử lý lỗi theo mã HTTP
+        let errorMessage = 'Có lỗi xảy ra';
+        
+        if (response.status === 404) {
+          errorMessage = 'Không tìm thấy API. Vui lòng kiểm tra lại đường dẫn server.';
+        } else if (response.status === 422) {
+          errorMessage = 'Dữ liệu không hợp lệ. Vui lòng kiểm tra lại nội dung hoặc URL bạn nhập.';
+        } else if (response.status === 500) {
+          errorMessage = 'Lỗi server. Vui lòng thử lại sau ít phút.';
+        } else if (response.status === 503) {
+          errorMessage = 'Server đang bảo trì. Vui lòng thử lại sau.';
+        } else if (response.status === 403) {
+          errorMessage = 'Không có quyền truy cập. Vui lòng kiểm tra cấu hình API.';
+        } else if (response.status === 401) {
+          errorMessage = 'Chưa xác thực. Vui lòng kiểm tra API key hoặc token.';
+        } else if (response.status === 400) {
+          errorMessage = data.detail || 'Yêu cầu không hợp lệ. Vui lòng kiểm tra lại dữ liệu đầu vào.';
+        } else {
+          errorMessage = data.detail || errorMessage;
+        }
+        
+        throw new Error(errorMessage);
       }
 
       if (data.success) {
@@ -74,9 +96,31 @@ const FakeNewsChecker = () => {
       }
 
     } catch (err) {
-      setError(err.message || 'Lỗi kết nối đến server');
+      // Xử lý lỗi kết nối
+      let errorMessage = err.message;
+      
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        errorMessage = 'Không thể kết nối đến server. Vui lòng kiểm tra:\n• Kết nối mạng của bạn\n• Server đã được khởi động chưa\n• Địa chỉ API có chính xác không';
+      } else if (err.message.includes('timeout') || err.message.includes('timed out')) {
+        errorMessage = 'Kết nối bị timeout. Vui lòng kiểm tra kết nối mạng và thử lại.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    // Ctrl/Cmd + Enter để submit cho textarea
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      handleSubmit();
+    }
+    // Chỉ Enter (không có Shift) cho input URL
+    else if (e.key === 'Enter' && !e.shiftKey && inputType === 'url') {
+      e.preventDefault();
+      handleSubmit();
     }
   };
 
@@ -264,7 +308,7 @@ const FakeNewsChecker = () => {
             <label className="block text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
               {inputType === 'text' ? (
                 <>
-                  <span className="text-2xl">📝</span>
+                  <span className="text-2xl">🧾</span>
                   <span>Nội dung cần kiểm tra</span>
                 </>
               ) : (
@@ -279,6 +323,7 @@ const FakeNewsChecker = () => {
                 <textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
+                  onKeyDown={handleKeyPress}
                   placeholder="Dán nội dung tin tức cần kiểm tra vào đây..."
                   className="w-full h-52 p-5 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-500/30 focus:border-blue-500 transition-all duration-300 resize-none text-gray-800 text-base leading-relaxed"
                   disabled={loading}
@@ -299,6 +344,18 @@ const FakeNewsChecker = () => {
                           <span className="text-blue-500 font-bold mt-0.5">→</span>
                           <span>Càng nhiều nội dung, độ chính xác càng cao</span>
                         </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-blue-500 font-bold mt-0.5">→</span>
+                          <span>Nên nhập toàn bộ nội dung bài báo thay vì chỉ tiêu đề</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-blue-500 font-bold mt-0.5">→</span>
+                          <span>Đây là công cụ dùng để kiểm tra tính chính xác của tin tức, không phải công cụ tìm kiếm tin tức</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-blue-500 font-bold mt-0.5">⌨️</span>
+                          <span><kbd className="px-2 py-1 bg-white rounded border border-blue-300 text-xs font-mono">Ctrl</kbd> + <kbd className="px-2 py-1 bg-white rounded border border-blue-300 text-xs font-mono">Enter</kbd> để kiểm tra nhanh</span>
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -310,6 +367,7 @@ const FakeNewsChecker = () => {
                   type="url"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
+                  onKeyDown={handleKeyPress}
                   placeholder="https://vnexpress.net/tieu-de-bai-bao-12345.html"
                   className="w-full p-5 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-purple-500/30 focus:border-purple-500 transition-all duration-300 text-gray-800 text-base"
                   disabled={loading}
@@ -332,6 +390,10 @@ const FakeNewsChecker = () => {
                         <div className="flex items-center gap-2 text-red-700">
                           <AlertCircle className="w-4 h-4" />
                           <span className="font-medium">https://vnexpress.net/topic/covid-19</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-purple-600 mt-3 pt-3 border-t border-purple-200">
+                          <Info className="w-4 h-4" />
+                          <span className="text-xs">Nhấn <kbd className="px-1.5 py-0.5 bg-white rounded border border-purple-300 font-mono">Enter</kbd> để kiểm tra nhanh</span>
                         </div>
                       </div>
                     </div>
@@ -403,9 +465,9 @@ const FakeNewsChecker = () => {
               <div className="flex-shrink-0 w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
                 <AlertCircle className="w-5 h-5 text-white" />
               </div>
-              <div>
+              <div className="flex-1">
                 <p className="font-bold text-red-900 text-lg mb-1">Đã xảy ra lỗi</p>
-                <p className="text-red-700 text-sm">{error}</p>
+                <p className="text-red-700 text-sm whitespace-pre-line">{error}</p>
               </div>
             </div>
           )}
