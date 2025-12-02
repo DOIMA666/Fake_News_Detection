@@ -1,78 +1,94 @@
 import os
 from typing import Dict, Any, List
-
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
 class Config:
+    """Enhanced Configuration hỗ trợ Groq Cloud & Local Ollama"""
 
-    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", None)
+    # === API Keys ===
+    # 1. Lấy chuỗi thô từ env (Biến GOOGLE_API_KEY chứa danh sách phân cách bởi dấu phẩy)
+    _RAW_GOOGLE_KEYS = os.getenv("GOOGLE_API_KEY", "")
+
+    # 2. Tách chuỗi thành List các key (Xử lý dấu phẩy và khoảng trắng)
+    GOOGLE_API_KEYS_LIST = [k.strip() for k in _RAW_GOOGLE_KEYS.split(",") if k.strip()]
+
+    # 3. Active Key mặc định (cho các module cũ hoặc logic chỉ cần 1 key)
+    ACTIVE_GOOGLE_KEY = GOOGLE_API_KEYS_LIST[0] if GOOGLE_API_KEYS_LIST else None
+
     GOOGLE_CSE_ID = os.getenv("GOOGLE_CSE_ID", None)
 
-    NEWS_API_KEY = os.getenv("NEWS_API_KEY", None)
+    # === GROQ CLOUD (Primary AI) ===
+    USE_GROQ = True
+    # Groq Key cũng có thể là list, giữ nguyên string để StanceAnalyzer tự xử lý
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY", None)
+    GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
-    # --- Cấu hình Cache ---
+    # === Cache Configuration ===
     ENABLE_CACHE = os.getenv("ENABLE_CACHE", "true").lower() == "true"
     CACHE_TTL_HOURS = int(os.getenv("CACHE_TTL_HOURS", "24"))
 
-    # --- Cấu hình logic tìm kiếm ---
-    DEFAULT_NUM_RESULTS = int(os.getenv("DEFAULT_NUM_RESULTS", "5"))
-    MAX_NUM_RESULTS = int(os.getenv("MAX_NUM_RESULTS", "10"))
+    # === Search Configuration ===
+    DEFAULT_NUM_RESULTS = int(os.getenv("DEFAULT_NUM_RESULTS", "15"))
+    MAX_NUM_RESULTS = int(os.getenv("MAX_NUM_RESULTS", "20"))
 
-    # --- Cấu hình mô hình AI ---
+    # === Model Configuration ===
     SIMILARITY_MODEL = os.getenv(
         "SIMILARITY_MODEL", "bkai-foundation-models/vietnamese-bi-encoder"
     )
 
-    VERDICT_THRESHOLDS: Dict[str, float] = {
-        "HIGHLY_LIKELY_TRUE": 0.85,
-        "LIKELY_TRUE": 0.70,
-        "UNCERTAIN": 0.50,
-        "LIKELY_FALSE": 0.30,
-        "HIGHLY_LIKELY_FALSE": 0.0,
+    # === Verdict Thresholds ===
+    # Định nghĩa các hằng số ngưỡng tại đây để dễ quản lý
+    T_UPPER = 0.05
+    T_LOWER = -0.05
+
+    VERDICT_THRESHOLDS: Dict[str, Dict[str, Any]] = {
+        "LIKELY_TRUE": {"label": "Thông tin có khả năng đúng", "color": "#22c55e"},
+        "LIKELY_FALSE": {"label": "Thông tin có khả năng sai", "color": "#ef4444"},
+        "UNCERTAIN": {"label": "Không chắc chắn", "color": "#fbbf24"},
     }
 
-    # --- Cấu hình Server (Uvicorn) ---
+    # === Feature Flags ===
+    ENABLE_STANCE_DETECTION = True
+    ENABLE_CREDIBILITY_SCORING = True
+
+    # === Server Configuration ===
     API_HOST = os.getenv("API_HOST", "0.0.0.0")
     API_PORT = int(os.getenv("API_PORT", "8000"))
     API_RELOAD = os.getenv("API_RELOAD", "false").lower() == "true"
-
     CORS_ORIGINS: List[str] = os.getenv("CORS_ORIGINS", "*").split(",")
-
-    # Cấu hình mức độ log
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
     @classmethod
     def validate(cls):
+        """Validate configuration and show status"""
         print("\n" + "=" * 70)
-        print(" CONFIGURATION STATUS")
+        print(" FACT CHECKER SYSTEM STATUS (GROQ ONLY)")
         print("=" * 70)
 
-        # [Logic đã cập nhật] Kiểm tra xem Google API (chiến lược duy nhất)
-        if cls.GOOGLE_API_KEY and cls.GOOGLE_CSE_ID:
-            print(" Google Custom Search API: CONFIGURED")
-            print("   → Will use Google API for searching (RECOMMENDED)")
+        # Google Search
+        if cls.GOOGLE_API_KEYS_LIST and cls.GOOGLE_CSE_ID:
+            print(" ✓ Google Search API:  CONNECTED")
+            print(f"   → Loaded {len(cls.GOOGLE_API_KEYS_LIST)} API Keys for rotation")
         else:
-            # Nếu không có API, web_searcher.py sẽ không hoạt động
-            print(" Google Custom Search API: NOT CONFIGURED")
-            print("   → ERROR: Search functionality will NOT work.")
-            print("   → Please set GOOGLE_API_KEY and GOOGLE_CSE_ID in .env file.")
+            print(" ✗ Google Search API:  MISSING (Search will fail)")
 
-        if cls.NEWS_API_KEY:
-            print(" NewsAPI: CONFIGURED")
+        print("-" * 70)
+
+        # AI Status
+        if cls.GROQ_API_KEY:
+            print(f" ✓ AI Engine (Groq):   CONNECTED ({cls.GROQ_MODEL})")
         else:
-            print("   NewsAPI: NOT CONFIGURED (optional)")
+            print(" ✗ AI Engine (Groq):   MISSING API KEY")
 
-        print(f"\n Cache: {'ENABLED' if cls.ENABLE_CACHE else 'DISABLED'}")
-        print(f" Cache TTL: {cls.CACHE_TTL_HOURS} hours")
-        print(f" Default results: {cls.DEFAULT_NUM_RESULTS}")
-        print(f" Similarity model: {cls.SIMILARITY_MODEL}")
-        print(f" API Server: {cls.API_HOST}:{cls.API_PORT}")
+        print("-" * 70)
+        print(f" Server: {cls.API_HOST}:{cls.API_PORT}")
         print("=" * 70 + "\n")
 
-        return True
+        return bool(cls.GOOGLE_API_KEYS_LIST and cls.GOOGLE_CSE_ID and cls.GROQ_API_KEY)
 
 
+# Validate on import
 Config.validate()

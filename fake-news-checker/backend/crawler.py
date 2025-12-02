@@ -9,7 +9,8 @@ import requests
 from bs4 import BeautifulSoup, element
 from curl_cffi import requests as cffi_requests
 
-from text_utils import normalize_text
+# === THAY ĐỔI Ở ĐÂY: Import class InputValidator thay vì text_utils ===
+from input_validator import InputValidator
 
 logger = logging.getLogger(__name__)
 
@@ -130,10 +131,11 @@ class Crawler:
                         logger.info(
                             f"Successfully extracted {len(content)} characters (via curl_cffi)"
                         )
+                        # === THAY ĐỔI: Gọi hàm static từ InputValidator ===
                         return {
-                            "title": normalize_text(title),
-                            "description": normalize_text(description),
-                            "content": normalize_text(content),
+                            "title": InputValidator.normalize_text(title),
+                            "description": InputValidator.normalize_text(description),
+                            "content": InputValidator.normalize_text(content),
                             "url": url,
                             "domain": domain,
                         }
@@ -185,10 +187,11 @@ class Crawler:
                         logger.info(
                             f"Archive.org extraction successful: {len(content)} chars"
                         )
+                        # === THAY ĐỔI: Gọi hàm static từ InputValidator ===
                         return {
-                            "title": normalize_text(title),
-                            "description": normalize_text(description),
-                            "content": normalize_text(content),
+                            "title": InputValidator.normalize_text(title),
+                            "description": InputValidator.normalize_text(description),
+                            "content": InputValidator.normalize_text(content),
                             "url": url,
                             "domain": urlparse(url).netloc,
                         }
@@ -223,10 +226,11 @@ class Crawler:
 
                     if title and snippet and len(snippet) > 100:
                         logger.info("Search snippet extraction successful")
+                        # === THAY ĐỔI: Gọi hàm static từ InputValidator ===
                         return {
-                            "title": normalize_text(title),
+                            "title": InputValidator.normalize_text(title),
                             "description": "",
-                            "content": normalize_text(snippet),
+                            "content": InputValidator.normalize_text(snippet),
                             "url": url,
                             "domain": urlparse(url).netloc,
                         }

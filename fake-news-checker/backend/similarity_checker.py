@@ -14,14 +14,6 @@ class SimilarityChecker:
     def encode_text(self, text: str) -> Any:
         return self.model.encode(text, convert_to_tensor=True)
 
-    def calculate_similarity(self, text1: str, text2: str) -> float:
-        embedding1 = self.encode_text(text1)
-        embedding2 = self.encode_text(text2)
-
-        similarity = util.cos_sim(embedding1, embedding2)
-
-        return float(similarity[0][0])
-
     def calculate_similarity_batch(
         self, query_text: str, reference_texts: List[str]
     ) -> List[Dict[str, Any]]:
@@ -42,50 +34,6 @@ class SimilarityChecker:
         results.sort(key=lambda x: x["similarity"], reverse=True)
 
         return results
-
-    def generate_verdict(self, similarity_score: float) -> Dict[str, Any]:
-        if similarity_score >= 0.85:
-            verdict = "HIGHLY_LIKELY_TRUE"
-            label = "Rất có khả năng đúng"
-            explanation = "Nội dung có độ tương đồng rất cao với các nguồn tin uy tín."
-            color = "green"
-        elif similarity_score >= 0.70:
-            verdict = "LIKELY_TRUE"
-            label = "Có khả năng đúng"
-            explanation = (
-                "Nội dung khá tương đồng với các nguồn tin uy tín, "
-                "nhưng cần xem xét thêm."
-            )
-            color = "lightgreen"
-        elif similarity_score >= 0.50:
-            verdict = "UNCERTAIN"
-            label = "Không chắc chắn"
-            explanation = (
-                "Nội dung có một số điểm tương đồng nhưng cần kiểm chứng kỹ hơn."
-            )
-            color = "orange"
-        elif similarity_score >= 0.30:
-            verdict = "LIKELY_FALSE"
-            label = "Có khả năng sai"
-            explanation = "Nội dung có ít điểm tương đồng với các nguồn tin uy tín."
-            color = "coral"
-        else:
-            verdict = "HIGHLY_LIKELY_FALSE"
-            label = "Rất có khả năng sai"
-            explanation = "Nội dung có độ tương đồng rất thấp với các nguồn tin uy tín."
-            color = "red"
-
-        # Tính toán độ tin cậy dựa trên khoảng cách
-        confidence = abs(similarity_score - 0.5) * 2
-
-        return {
-            "verdict": verdict,
-            "label": label,
-            "explanation": explanation,
-            "color": color,
-            "similarity_score": similarity_score,
-            "confidence": confidence,
-        }
 
 
 if __name__ == "__main__":

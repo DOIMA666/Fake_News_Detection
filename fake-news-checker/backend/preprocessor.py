@@ -1,301 +1,211 @@
 import logging
+import os
 import re
-from collections import Counter
-from typing import Any, Dict, List, Optional, Tuple
+import json
+from typing import Any, Dict, List, Optional
 
+
+# Import Groq Client
 try:
-    from keybert import KeyBERT
-    from transformers import AutoModel, AutoTokenizer
-    from underthesea import ner, sent_tokenize
+    from groq import Groq
 
-    PHOBERT_AVAILABLE = True
+    GROQ_AVAILABLE = True
 except ImportError:
-    PHOBERT_AVAILABLE = False
-    logging.warning(
-        "PhoBERT/KeyBERT/Underthesea dependencies not available. "
-        "Using basic preprocessing."
-    )
+    GROQ_AVAILABLE = False
 
 from crawler import Crawler
-from text_utils import normalize_text
+from input_validator import InputValidator
 
 logger = logging.getLogger(__name__)
 
 
 class TextPreprocessor:
-    def __init__(self, use_phobert: bool = True):
-        self.use_phobert = use_phobert and PHOBERT_AVAILABLE
-        self.stopwords = self._load_stopwords()
+    """
+    Sử dụng Groq Cloud (Llama 3.3 70B) để xử lý văn bản:
+    1. Sinh truy vấn tìm kiếm (Search Queries).
+    2. Phân loại chủ đề (Topic Classification).
+    """
+
+    CATEGORIES = {
+        "politics": "Chính trị",
+        "crime": "Pháp luật - Tội phạm",
+        "health": "Sức khỏe - Y tế",
+        "entertainment": "Giải trí - Showbiz",
+        "sports": "Thể thao",
+        "economy": "Kinh tế - Tài chính",
+        "technology": "Công nghệ",
+        "education": "Giáo dục",
+        "society": "Xã hội",
+        "international": "Quốc tế",
+        "other": "Khác",
+    }
+
+    def __init__(self):
         self.crawler = Crawler()
 
-        if self.use_phobert:
-            self._init_phobert()
+        # --- LOGIC CẮT CHUỖI KEY GROQ ---
+        raw_key = os.getenv("GROQ_API_KEY", "")
+        # Chỉ lấy key đầu tiên nếu có danh sách phân cách bởi dấu phẩy
+        self.groq_api_key = raw_key.split(",")[0].strip() if raw_key else None
 
-        logger.info(f"Preprocessor initialized (PhoBERT: {self.use_phobert})")
+        self.groq_model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+        self.groq_client = None
 
-    def _init_phobert(self):
-        try:
-            logger.info("Loading PhoBERT models...")
-            model_name = "vinai/phobert-base"
-
-            self.phobert_tokenizer = AutoTokenizer.from_pretrained(model_name)
-            self.phobert_model = AutoModel.from_pretrained(model_name)
-            self.phobert_model.eval()
-
-            # KeyBERT sẽ sử dụng mô hình PhoBERT làm nền
-            self.kw_model = KeyBERT(model=self.phobert_model)
-
-            logger.info(f"PhoBERT loaded successfully! (Model: {model_name})")
-
-        except Exception as e:
-            logger.error(f"Failed to load PhoBERT: {e}", exc_info=True)
-            self.use_phobert = False
-
-    def _load_stopwords(self) -> set:
-        return set(
-            [
-                "và",
-                "hoặc",
-                "của",
-                "có",
-                "được",
-                "đã",
-                "đang",
-                "sẽ",
-                "này",
-                "đó",
-                "kia",
-                "các",
-                "những",
-                "cho",
-                "từ",
-                "với",
-                "trong",
-                "ngoài",
-                "trên",
-                "dưới",
-                "là",
-                "thì",
-                "mà",
-                "một",
-                "hai",
-                "ba",
-                "bốn",
-                "năm",
-                "sáu",
-                "bảy",
-                "tám",
-                "cũng",
-                "để",
-                "vào",
-                "ra",
-                "đến",
-                "bị",
-                "bởi",
-                "còn",
-                "khi",
-                "lại",
-                "sau",
-                "trước",
-                "nếu",
-                "không",
-                "chỉ",
-                "như",
-                "theo",
-                "đều",
-                "rất",
-                "hay",
-                "về",
-                "tại",
-                "do",
-                "đây",
-                "đấy",
-                "ấy",
-                "nào",
-                "gì",
-                "ai",
-                "đâu",
-                "bao",
-                "lúc",
-                "nơi",
-                "người",
-                "việc",
-                "chúng",
-                "nhiều",
-            ]
-        )
-
-    def simple_tokenize(self, text: str) -> List[str]:
-        text = re.sub(r"([.,!?;:])", r" \1 ", text)
-        tokens = text.split()
-        tokens = [t.strip() for t in tokens if t.strip()]
-        return tokens
-
-    def extract_title_from_text(self, text: str) -> str:
-        if self.use_phobert:
+        if GROQ_AVAILABLE and self.groq_api_key:
             try:
-                sentences = sent_tokenize(text)
-                if not sentences:
-                    return text.split(".")[0].strip()
-                scores = []
-                for i, sent in enumerate(sentences[:5]):
-                    score = (5 - i) * 2
-                    word_count = len(sent.split())
-                    if 5 <= word_count <= 20:
-                        score += 3
-                    elif 3 <= word_count <= 25:
-                        score += 1
-                    entities = ner(sent)
-                    score += len(entities)
-                    scores.append((sent, score))
-                best_sentence = max(scores, key=lambda x: x[1])[0]
-                return best_sentence.strip()
-            except Exception as e:
-                logger.warning(f"PhoBERT title extraction failed: {e}")
-        return text.split(".")[0].strip()
-
-    def extract_keywords_phobert(self, text: str, top_n: int = 15) -> List[str]:
-        try:
-            keywords = self.kw_model.extract_keywords(
-                text,
-                keyphrase_ngram_range=(1, 2),
-                stop_words=list(self.stopwords),
-                top_n=top_n,
-                use_mmr=True,  # Sử dụng MMR để đa dạng hóa kết quả
-                diversity=0.5,
-            )
-            return [kw[0] for kw in keywords]
-        except Exception as e:
-            logger.error(f"KeyBERT extraction failed: {e}")
-            return []
-
-    def extract_keywords_basic(self, text: str, top_n: int = 15) -> List[str]:
-        normalized = normalize_text(text)
-        tokens = self.simple_tokenize(normalized)
-        filtered_tokens = []
-        for token in tokens:
-            if token in ".,!?;:()-":
-                continue
-            if token.lower() in self.stopwords:
-                continue
-            if len(token) < 3 or token.isdigit():
-                continue
-            if not any(c.isalnum() for c in token):
-                continue
-            filtered_tokens.append(token.lower())
-        word_freq = Counter(filtered_tokens)
-        keywords = [word for word, freq in word_freq.most_common(top_n)]
-        return keywords
-
-    def extract_keywords(self, text: str, top_n: int = 15) -> List[str]:
-        if self.use_phobert:
-            phobert_kws = self.extract_keywords_phobert(text, top_n)
-            if phobert_kws:
+                self.groq_client = Groq(api_key=self.groq_api_key)
                 logger.info(
-                    f"Extracted {len(phobert_kws)} keywords via PhoBERT/KeyBERT"
+                    f"✅ Preprocessor: Connected to Groq Cloud ({self.groq_model})"
                 )
-                return phobert_kws
-        logger.info("Using basic keyword extraction (fallback)")
-        return self.extract_keywords_basic(text, top_n)
+            except Exception as e:
+                logger.error(f"❌ Groq Init Failed: {e}")
+        else:
+            logger.warning("⚠️ No AI configured. Using basic fallback.")
 
-    def extract_named_entities(self, text: str) -> List[Tuple[str, str]]:
-        if not self.use_phobert:
-            return []
+    def _extract_json(self, text: str) -> Optional[Dict]:
+        """Trích xuất JSON từ phản hồi của LLM (xử lý cả trường hợp Markdown)"""
         try:
-            entities = ner(text)
-            return [(e[0], e[3]) for e in entities if e[3] != "O"]
-        except Exception as e:
-            logger.warning(f"NER failed: {e}")
-            return []
+            # Tìm đoạn nằm giữa { và }
+            match = re.search(r"\{.*\}", text, re.DOTALL)
+            if match:
+                return json.loads(match.group(0))
+        except json.JSONDecodeError:
+            pass
+        return None
 
-    def extract_numbers_from_text(self, text: str) -> List[str]:
-        patterns = [
-            r"\d+[\.,]\d+[\.,]\d+",
-            r"\d+\s*(?:triệu|tỷ|nghìn|ngàn|tỉ)",
-            r"\d+\s*%",
-            r"\d{4,}",
-            r"\d+[\.,]\d+",
-        ]
-        numbers = []
-        for pattern in patterns:
-            matches = re.findall(pattern, text, re.IGNORECASE)
-            numbers.extend(matches)
-        unique_numbers = []
-        seen = set()
-        for num in numbers:
-            normalized = num.lower().replace(" ", "")
-            if normalized not in seen:
-                seen.add(normalized)
-                unique_numbers.append(num)
-        return unique_numbers[:3]
+    def analyze_input(self, text: str) -> Dict[str, Any]:
+        """
+        Dùng LLM để phân tích input -> Trả về JSON {category, queries}
+        """
+        # Giá trị mặc định nếu lỗi
+        default_result = {
+            "category": "other",
+            "category_label": self.CATEGORIES["other"],
+            "queries": [InputValidator.normalize_text(text)[:200]],
+        }
+
+        if not self.groq_client:
+            return default_result
+
+        prompt = f"""
+Bạn là một Chuyên gia Kiểm chứng Thông tin (Fact-Checking Expert) và Phân tích Nội dung.
+Nhiệm vụ của bạn là xử lý văn bản đầu vào để tạo ra các truy vấn tìm kiếm xác thực và phân loại chủ đề chính xác.
+
+INPUT VĂN BẢN: "{text[:1000]}"
+
+NHIỆM VỤ 1: TẠO 3 TRUY VẤN TÌM KIẾM (SEARCH QUERIES)
+Mục tiêu: Từ thông tin người dùng nhập, hãy tạo ra 3 truy vấn tìm kiếm (Search Query) tối ưu nhất để kiểm chứng sự thật trên Google.
+Kỹ thuật:
+1. Phân tích ý định người dùng: Họ muốn kiểm tra tin đồn, sự kiện, hay câu nói?
+2. Tối ưu từ khóa: Loại bỏ từ thừa (là, của, những...), giữ lại thực thể quan trọng (Tên người, địa danh, sự kiện).
+3. Nếu input quá dài: Tóm tắt thành luận điểm cốt lõi (Main Claim).
+4. Nếu input quá ngắn/mơ hồ: Tìm kiếm các từ khóa ngữ cảnh
+
+NHIỆM VỤ 2: PHÂN LOẠI CHỦ ĐỀ (CATEGORY CLASSIFICATION)
+Phân loại văn bản vào DUY NHẤT MỘT trong các danh mục sau (dựa trên nội dung chủ đạo):
+- politics: (Chính trị, bầu cử, chính sách, quan chức nhà nước)
+- crime: (Pháp luật, tội phạm, bắt bớ, tòa án, lừa đảo)
+- health: (Y tế, dịch bệnh, thuốc, bác sĩ, sức khỏe)
+- entertainment: (Giải trí, người nổi tiếng, showbiz, phim, nhạc)
+- sports: (Thể thao, bóng đá, giải đấu, vận động viên)
+- economy: (Kinh tế, tài chính, chứng khoán, giá vàng/đô la, doanh nghiệp)
+- technology: (Công nghệ, AI, phần mềm, thiết bị số, mạng xã hội)
+- education: (Giáo dục, trường học, tuyển sinh, thi cử)
+- society: (Đời sống xã hội, giao thông, môi trường, thời tiết)
+- international: (Thời sự quốc tế, quan hệ ngoại giao, xung đột thế giới)
+- other: (Các chủ đề không thuộc danh sách trên)
+
+YÊU CẦU ĐẦU RA (QUAN TRỌNG):
+- Chỉ trả về định dạng JSON hợp lệ.
+- Không sử dụng Markdown (```json).
+- Không thêm bất kỳ lời dẫn hay giải thích nào.
+
+MẪU OUTPUT:
+{{
+  "category": "health",
+  "queries": [
+    "thực hư thông tin uống nước chanh chữa ung thư",
+    "bác sĩ đính chính tin đồn nước chanh nóng giết tế bào ung thư",
+    "nghiên cứu khoa học về tác dụng nước chanh với ung thư"
+  ]
+}}
+"""
+        try:
+            completion = self.groq_client.chat.completions.create(
+                messages=[
+                    {"role": "system", "content": "You are a JSON generator."},
+                    {"role": "user", "content": prompt},
+                ],
+                model=self.groq_model,
+                temperature=0.1,
+                response_format={"type": "json_object"},  # Bắt buộc JSON
+                max_tokens=200,
+            )
+
+            response_text = completion.choices[0].message.content.strip()
+            data = self._extract_json(response_text)
+
+            if data:
+                cat_code = data.get("category", "other")
+                if cat_code not in self.CATEGORIES:
+                    cat_code = "other"
+
+                return {
+                    "category": cat_code,
+                    "category_label": self.CATEGORIES.get(cat_code, "Khác"),
+                    "queries": data.get("queries", [])[:3],
+                }
+
+        except Exception as e:
+            logger.error(f"LLM Analysis Error: {e}")
+
+        return default_result
 
     def process_input(
         self, input_data: str, input_type: str = "text"
     ) -> Optional[Dict[str, Any]]:
+        """
+        Xử lý đầu vào: Crawl (nếu URL) -> Analyze (LLM)
+        """
+        content = input_data
+        title = ""
+        domain = None
+
         if input_type == "url":
             logger.info(f"Processing URL: {input_data}")
-            return self._process_url(input_data)
+            extracted = self.crawler.extract_from_url(input_data)
+            if extracted:
+                content = f"{extracted['title']}. {extracted['description']}."
+                title = extracted["title"]
+                domain = extracted["domain"]
+            else:
+                return None
 
-        # Xử lý input_type == 'text'
-        logger.info(f"Processing text: {len(input_data)} characters")
-        normalized = normalize_text(input_data)
+        # Cắt ngắn nếu quá dài để tiết kiệm token
+        if len(content) > 3000:
+            content = content[:3000]
 
-        # Chỉ chạy trích xuất từ khóa (KeyBERT).
-        keywords = self.extract_keywords(normalized, top_n=15)
-        logger.info(f"Keywords: {keywords[:10]}")
+        clean_content = (
+            InputValidator.normalize_text(content) if input_type == "text" else content
+        )
 
-        entities = []
-        numbers = []
+        # Gọi AI phân tích
+        logger.info("Analyzing input via Groq...")
+        analysis = self.analyze_input(content)
+
+        logger.info(
+            f"Category: {analysis['category_label']} | Queries: {analysis['queries']}"
+        )
 
         return {
             "original_input": input_data,
-            "input_type": "text",
-            "title": "",
-            "content": normalized,
-            "full_text": normalized,
-            "keywords": keywords,
-            "entities": entities,
-            "numbers": numbers,
-            "domain": None,
+            "input_type": input_type,
+            "title": title,
+            "content": content,
+            "full_text": content,
+            "summary_text": content,
+            "keywords": analysis["queries"],  # ✅ Lấy từ dict
+            "category": analysis["category"],  # ✅ Lấy từ dict
+            "category_label": analysis["category_label"],
+            "domain": domain,
         }
-
-    def _process_url(self, url: str) -> Optional[Dict[str, Any]]:
-        extracted = self.crawler.extract_from_url(url)
-        if not extracted:
-            logger.error(f"Failed to extract content from URL: {url}")
-            return None
-
-        # Tối ưu: Chỉ trích xuất từ khóa từ Tiêu đề + Mô tả + 500 ký tự đầu
-        text_for_keywords = (
-            f"{extracted['title']} "
-            f"{extracted['description']} "
-            f"{extracted['content'][:500]}"
-        )
-        # full_text vẫn chứa toàn bộ nội dung để so sánh ở Bước 5
-        full_text = (
-            f"{extracted['title']} {extracted['description']} {extracted['content']}"
-        )
-        logger.info(f"Extracted {len(full_text)} characters from URL")
-
-        # Tối ưu logic: Chỉ chạy trích xuất từ khóa (KeyBERT).
-        keywords = self.extract_keywords(text_for_keywords, top_n=15)
-        logger.info(f"Keywords: {keywords[:10]}")
-
-        entities = []
-        numbers = []
-
-        return {
-            "original_input": url,
-            "input_type": "url",
-            "title": extracted["title"],
-            "content": extracted["content"],
-            "full_text": full_text,
-            "keywords": keywords,
-            "entities": entities,
-            "numbers": numbers,
-            "domain": extracted["domain"],
-        }
-
-
-if __name__ == "__main__":
-    pass

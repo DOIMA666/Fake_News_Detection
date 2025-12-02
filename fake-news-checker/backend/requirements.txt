@@ -10,9 +10,13 @@ curl_cffi
 
 # === NLP & ML - Core ===
 torch>=2.0.0 
-transformers>=4.30.0 
+# --- SỬA DÒNG NÀY (Nâng version transformers lên) ---
+transformers>=4.41.0
+# ----------------------------------------------------
 sentence-transformers==3.3.0 
 numpy==1.26.4 
+# Thêm accelerate để hỗ trợ transformers mới tốt hơn
+accelerate>=0.26.0
 
 # === Vietnamese NLP - PhoBERT Support ===
 keybert>=0.7.0 
@@ -20,3 +24,7 @@ underthesea>=6.7.0
 
 # === Utilities ===
 python-dotenv==1.0.1
+groq==0.4.2
+
+# === CodeCarbon ===
+codecarbon
