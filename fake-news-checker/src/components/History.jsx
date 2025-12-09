@@ -10,7 +10,8 @@ const History = ({
   communityHistory, 
   loadCommunityHistory, 
   savedItems, 
-  deleteSavedItem 
+  deleteSavedItem ,
+  onSelect
 }) => {
   return (
     <div className="space-y-6 animate-fade-in">
@@ -92,6 +93,7 @@ const History = ({
                 return (
                   <div 
                     key={item.id}
+                    onClick={() => onSelect(item, false)}
                     className={`p-6 rounded-2xl border-2 ${config.bgLight} ${config.bg.replace('from-', 'border-').split(' ')[0].replace('via-', '').replace('to-', '')} hover:shadow-lg transition-all duration-300 cursor-pointer`}
                     style={{ animationDelay: `${idx * 50}ms` }}
                   >
@@ -161,6 +163,7 @@ const History = ({
                 return (
                   <div 
                     key={item.id}
+                    onClick={() => onSelect(item, true)}
                     className={`p-6 rounded-2xl border-2 ${config.bgLight} hover:shadow-lg transition-all duration-300`}
                     style={{ animationDelay: `${idx * 50}ms` }}
                   >
@@ -213,6 +216,7 @@ const History = ({
               return (
                 <div 
                   key={item.id}
+                  onClick={() => onSelect(item, false)}
                   className={`p-6 rounded-2xl border-2 ${config.bgLight} hover:shadow-lg transition-all duration-300`}
                   style={{ animationDelay: `${idx * 50}ms` }}
                 >

@@ -3,11 +3,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from typing import Any, Dict, Optional, List
 
-# Import Config
 try:
     from config import Config
 except ImportError:
-    # Fallback config để test độc lập
     class Config:
         GOOGLE_API_KEY = None
         GOOGLE_API_KEYS_LIST = []
@@ -17,8 +15,6 @@ except ImportError:
         GROQ_API_KEY = None
         GROQ_MODEL = "llama-3.3-70b-versatile"
 
-
-# Import Modules
 try:
     from preprocessor import TextPreprocessor
     from similarity_checker import SimilarityChecker
@@ -33,14 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 class EnhancedFactChecker:
-    """
-    ✅ FACT CHECKER v3.0 (OPTIMIZED)
-    - Core: Weighted Consensus Algorithm
-    - Thresholds: Data-Driven from Training
-    - AI: Groq Llama 3.3 70B
-    """
 
-    # Định nghĩa giá trị cho từng loại quan điểm
     STANCE_VALUES = {
         "SUPPORT": 1.0,
         "REFUTE": -1.0,
@@ -58,8 +47,6 @@ class EnhancedFactChecker:
         logger.info(" Initializing Enhanced Fact Checker v3.0 (Production Ready)")
         logger.info("=" * 70)
 
-        # Lấy danh sách key từ Config
-        # Nếu người dùng truyền vào init thì bọc nó thành list, nếu không lấy từ Config
         api_keys = [google_api_key] if google_api_key else Config.GOOGLE_API_KEYS_LIST
         cse_id = google_cse_id or Config.GOOGLE_CSE_ID
 
@@ -111,7 +98,6 @@ class EnhancedFactChecker:
             if not processed or not processed["keywords"]:
                 return {"status": "error", "message": "Input too short or invalid"}
 
-            # Lấy text để so sánh
             if input_type == "url":
                 claim_text = processed.get("summary_text", processed["full_text"][:800])
             else:
@@ -169,7 +155,6 @@ class EnhancedFactChecker:
             evidence_scores = []
 
             for i, ref in enumerate(reference_contents):
-                # Match results
                 stance_res = next(
                     (s for s in stance_results if s["article"]["url"] == ref["url"]),
                     None,
@@ -179,49 +164,23 @@ class EnhancedFactChecker:
                 if not stance_res or not sim_res:
                     continue
 
-                # --- 1. Lấy các chỉ số cơ bản ---
-                # Stance
                 stance_label = stance_res["stance"].value.upper()
                 stance_val = self.STANCE_VALUES.get(stance_label, 0.0)
 
-                # Credibility (Normalized 0-1)
                 cred_info = self.credibility_scorer.get_domain_score(ref["url"])
                 norm_cred = cred_info["score"] / 10.0
 
-                # Similarity
                 raw_sim = sim_res["similarity"]
 
-                # --- 2. Bộ lọc thông minh (Smart Filtering) ---
-                # Loại bỏ bài Unrelated hoặc Sim quá thấp
                 if stance_label == "UNRELATED":
                     continue
                 if raw_sim < 0.25:
                     continue
 
-                # --- 3. Similarity Boost ---
-                # Nếu AI đã chắc chắn (Support/Refute), nâng điểm Sim lên để không bị kéo tụt điểm
                 effective_sim = raw_sim
-                # if stance_label in ["SUPPORT", "REFUTE"]:
-                #     effective_sim = max(raw_sim, 0.85)
 
-                # --- 4. Tính Trọng số (Weight Calculation) ---
-                # Dùng hàm mũ để ưu tiên nguồn uy tín: Weight = Credibility ^ 2
                 weight = norm_cred
-                # weight = pow(norm_cred, 2)
 
-                # --- 5. Refutation Boost (Cú đấm thép) ---
-                # Nếu nguồn Tier 1 bác bỏ -> Nhân 4 lần sức mạnh
-                # if stance_label == "REFUTE":
-                #    if cred_info["tier"] == 1:
-                #        weight *= 4.0
-                #    elif cred_info["tier"] == 2:
-                #        weight *= 2.5
-                #    elif cred_info["tier"] <= 3:
-                #        weight *= 1.5
-
-                # --- 6. Tính điểm thành phần (Evidence Score) ---
-                # Score = Stance * Credibility * Sim
-                # Lưu ý: Discuss (Stance=0) sẽ có Score=0, nhưng vẫn có Weight > 0
                 evidence_score = stance_val * norm_cred * effective_sim
 
                 evidence_scores.append(
@@ -255,18 +214,14 @@ class EnhancedFactChecker:
             numerator = sum(e["evidence_score"] * e["weight"] for e in evidence_scores)
             denominator = sum(e["weight"] for e in evidence_scores)
 
-            # Weighted Average
             final_score = numerator / denominator if denominator > 0 else 0.0
 
-            # Mapping sang kết luận
             verdict_result = self._map_score_to_verdict(
                 final_score, len(evidence_scores)
             )
 
-            # Sắp xếp evidence theo trọng số để hiển thị đẹp
             evidence_scores.sort(key=lambda x: x["weight"], reverse=True)
 
-            # Đóng gói kết quả
             results["status"] = "success"
             results["verdict"] = verdict_result
             results["final_score"] = final_score
@@ -282,19 +237,12 @@ class EnhancedFactChecker:
             return {"status": "error", "message": str(e)}
 
     def _map_score_to_verdict(self, score: float, num_evidence: int) -> Dict[str, Any]:
-        """
-        ✅ 3-LEVEL THRESHOLD (DYNAMIC FROM CONFIG)
-        Đồng bộ hoàn toàn với Config.VERDICT_THRESHOLDS
-        """
 
-        # 1. Lấy ngưỡng từ Config (hoặc dùng mặc định nếu thiếu)
         t_upper = getattr(Config, "T_UPPER", 0.05)
         t_lower = getattr(Config, "T_LOWER", -0.05)
 
-        # 2. Lấy cấu hình hiển thị từ Config
         thresholds = getattr(Config, "VERDICT_THRESHOLDS", {})
 
-        # Helper để lấy config an toàn
         def get_cfg(key, default_label, default_color):
             item = thresholds.get(key, {})
             return item.get("label", default_label), item.get("color", default_color)
@@ -326,7 +274,7 @@ class EnhancedFactChecker:
         # TRƯỜNG HỢP 3: UNCERTAIN (KHÔNG CHẮC)
         else:
             label, color = get_cfg("UNCERTAIN", "Không chắc chắn", "#fbbf24")
-            confidence = 0.50  # Luôn giữ mức trung bình cho trường hợp này
+            confidence = 0.50  
             explanation = f"Hiện chưa đủ bằng chứng rõ ràng hoặc các nguồn tin đang có ý kiến trái chiều."
             code = "UNCERTAIN"
 
@@ -349,10 +297,10 @@ class EnhancedFactChecker:
                 stats[lbl] += 1
                 scores[lbl] += ev[
                     "weight"
-                ]  # Cộng trọng số để hiển thị mức độ ảnh hưởng
+                ]  
 
         return {
-            "total_score": round(final_score * 10, 2),  # Scale 10 cho đẹp
+            "total_score": round(final_score * 10, 2),  
             "support_count": stats["support"],
             "refute_count": stats["refute"],
             "discuss_count": stats["discuss"],
@@ -413,5 +361,4 @@ class EnhancedFactChecker:
         }
 
 
-# Backward compatibility
 FactChecker = EnhancedFactChecker

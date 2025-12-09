@@ -1,8 +1,6 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Shield, Sparkles, Zap, BarChart3, Search, Clock } from 'lucide-react';
 
-// Import components
 import Dashboard from './components/Dashboard';
 import Checker from './components/Checker';
 import History from './components/History';
@@ -21,9 +19,8 @@ const FakeNewsChecker = () => {
   const [history, setHistory] = useState([]);
   const [savedItems, setSavedItems] = useState([]);
                 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  const API_URL = import.meta.env.VITE_API_URL ;
 
-  // Real data from API
   const [stats, setStats] = useState({
     totalChecks: 0,
     trueNews: 0,
@@ -37,7 +34,6 @@ const FakeNewsChecker = () => {
   const [trendingTopics, setTrendingTopics] = useState([]);
   const [dataLoading, setDataLoading] = useState(false);
 
-  // Load history from localStorage
   useEffect(() => {
     const savedHistory = localStorage.getItem('checkHistory');
     if (savedHistory) {
@@ -49,25 +45,21 @@ const FakeNewsChecker = () => {
     }
   }, []);
 
-  // ✅ FIX: Sử dụng useCallback để tránh warning missing dependency
   const loadDashboardData = useCallback(async () => {
     setDataLoading(true);
     try {
-      // Load stats
       const statsRes = await fetch(`${API_URL}/api/stats`);
       const statsData = await statsRes.json();
       if (statsData.success) {
         setStats(statsData.data);
       }
 
-      // Load recent checks
       const recentRes = await fetch(`${API_URL}/api/recent?limit=10`);
       const recentData = await recentRes.json();
       if (recentData.success) {
         setRecentChecks(recentData.data);
       }
 
-      // Load trending topics
       const trendingRes = await fetch(`${API_URL}/api/trending?limit=5`);
       const trendingData = await trendingRes.json();
       if (trendingData.success) {
@@ -75,7 +67,6 @@ const FakeNewsChecker = () => {
       }
     } catch (err) {
       console.error('Failed to load dashboard data:', err);
-      // Reset data on error
       setStats({
         totalChecks: 0, trueNews: 0, falseNews: 0, uncertain: 0, todayChecks: 0, accuracy: 0
       });
@@ -84,9 +75,8 @@ const FakeNewsChecker = () => {
     } finally {
       setDataLoading(false);
     }
-  }, [API_URL]); // Dependency là API_URL
+  }, [API_URL]); 
 
-  // ✅ FIX: Sử dụng useCallback
   const loadCommunityHistory = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/api/history?skip=0&limit=20`);
@@ -100,18 +90,17 @@ const FakeNewsChecker = () => {
     }
   }, [API_URL]);
 
-  // Load dashboard data when tab changes to dashboard
   useEffect(() => {
     if (activeTab === 'dashboard') {
       loadDashboardData();
     }
-  }, [activeTab, loadDashboardData]); // ✅ Đã có dependency an toàn
+  }, [activeTab, loadDashboardData]); 
 
   useEffect(() => {
     if (activeTab === 'history' && historySubTab === 'community') {
       loadCommunityHistory();
     }
-  }, [activeTab, historySubTab, loadCommunityHistory]); // ✅ Đã có dependency an toàn
+  }, [activeTab, historySubTab, loadCommunityHistory]); 
 
   useEffect(() => {
     if (loading) {
@@ -159,6 +148,13 @@ const FakeNewsChecker = () => {
         })
       });
 
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('Non-JSON response:', text);
+        throw new Error('Server trả về response không hợp lệ. Vui lòng kiểm tra server logs.');
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -169,7 +165,6 @@ const FakeNewsChecker = () => {
         setProgress(100);
         setTimeout(() => {
           setResult(data);
-          // Add to history
           const newHistoryItem = {
             id: Date.now(),
             content: content.substring(0, 100) + '...',
@@ -190,8 +185,11 @@ const FakeNewsChecker = () => {
       
       if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
         errorMessage = 'Không thể kết nối đến server. Vui lòng kiểm tra:\n• Kết nối mạng của bạn\n• Server đã được khởi động chưa\n• Địa chỉ API có chính xác không';
+      } else if (err.message.includes('JSON')) {
+        errorMessage = 'Lỗi parse dữ liệu từ server. Kiểm tra console để biết thêm chi tiết.';
       }
       
+      console.error('Error details:', err);
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -276,7 +274,6 @@ const FakeNewsChecker = () => {
     
     const fileName = `Ket_qua_kiem_tra_tin_gia-${dateStr}_${timeStr}.txt`;
 
-    // 3. Tải file về
     const dataBlob = new Blob([contentText], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
@@ -291,6 +288,48 @@ const FakeNewsChecker = () => {
     const updated = savedItems.filter(item => item.id !== id);
     setSavedItems(updated);
     localStorage.setItem('savedItems', JSON.stringify(updated));
+  };
+
+  const handleHistorySelect = (item, isCommunity) => {
+
+    const contentText = isCommunity ? item.content_preview : item.content;
+    const inputTypeVal = isCommunity ? item.input_type : item.type;
+    
+    setContent(contentText || '');
+    setInputType(inputTypeVal || 'text');
+
+    let resultData;
+
+    if (item.result) {
+        resultData = item.result;
+    } 
+
+    else if (isCommunity) {
+        resultData = {
+            db_id: item.id,
+            verdict: {
+                code: item.verdict_code,
+                label: item.verdict_label,
+                explanation: "Chi tiết không khả dụng (Dữ liệu cũ hoặc chưa tải đầy đủ).",
+                confidence_percentage: item.confidence_percentage,
+            },
+            processed_data: { category: 'other', category_label: 'Đã lưu' },
+            references: [], 
+            voting_summary: null
+        };
+    } else {
+
+        resultData = item.result || {
+             verdict: item.verdict,
+
+        };
+    }
+
+    setResult(resultData);
+    setShowResult(true);
+    
+    setActiveTab('checker');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -410,6 +449,7 @@ const FakeNewsChecker = () => {
             loadCommunityHistory={loadCommunityHistory}
             savedItems={savedItems}
             deleteSavedItem={deleteSavedItem}
+            onSelect={handleHistorySelect}
           />
         )}
 

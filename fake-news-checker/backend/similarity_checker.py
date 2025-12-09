@@ -23,14 +23,12 @@ class SimilarityChecker:
             reference_texts, convert_to_tensor=True
         )
 
-        # Tính toán cosine similarity (1-vs-N)
         similarities = util.cos_sim(query_embedding, reference_embeddings)[0]
 
         results = []
         for idx, (text, sim) in enumerate(zip(reference_texts, similarities)):
             results.append({"text": text, "similarity": float(sim), "index": idx})
 
-        # Sắp xếp kết quả, điểm cao nhất lên đầu
         results.sort(key=lambda x: x["similarity"], reverse=True)
 
         return results

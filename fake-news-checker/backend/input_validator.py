@@ -13,7 +13,6 @@ class InputValidator:
     Chức năng:
     1. Validate: Kiểm tra tính hợp lệ bằng quy tắc cứng (Rules).
     2. Normalize: Chuẩn hóa văn bản.
-    * Đã loại bỏ AI Check để tăng tốc độ.
     """
 
     def __init__(self):
@@ -22,7 +21,6 @@ class InputValidator:
         self.MIN_WORDS = 3
         self.MAX_LENGTH_CHARS = 10000
 
-        # Regex patterns
         self.gibberish_patterns = [
             r"^[a-z]{20,}$",  # Chuỗi ký tự liền không có space
             r"^[^aeiouAEIOUàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵ\s]+$",  # Không nguyên âm

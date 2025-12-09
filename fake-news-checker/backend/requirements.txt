@@ -15,7 +15,7 @@ transformers>=4.41.0
 # ----------------------------------------------------
 sentence-transformers==3.3.0 
 numpy==1.26.4 
-# Thêm accelerate để hỗ trợ transformers mới tốt hơn
+# accelerate để hỗ trợ transformers mới tốt hơn
 accelerate>=0.26.0
 
 # === Vietnamese NLP - PhoBERT Support ===

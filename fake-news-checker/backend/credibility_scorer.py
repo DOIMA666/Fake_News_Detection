@@ -7,17 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 class CredibilityScorer:
-    """
-    ✨ IMPROVED Credibility Scorer
-
-    Cải tiến:
-    - ✅ Mở rộng database nguồn tin (100+ domains)
-    - ✅ Blacklist mechanism (phát hiện nguồn tin giả nổi tiếng)
-    - ✅ Domain reputation tracking
-    - ✅ Time-decay scoring (nguồn tin cũ giảm điểm)
-    - ✅ Pattern matching nâng cao
-    - ✅ Social media detection
-    """
 
     def __init__(self, enable_time_decay: bool = False):
         """Khởi tạo với database mở rộng"""
@@ -118,14 +107,13 @@ class CredibilityScorer:
             "quora.com",
         ]
 
-        # Merge tất cả trusted sources
         self.all_sources = {
             **self.tier1_sources,
             **self.tier2_sources,
             **self.tier3_sources,
         }
 
-        logger.info(f"✅ CredibilityScorer initialized:")
+        logger.info(f"CredibilityScorer initialized:")
         logger.info(f"   - {len(self.tier1_sources)} Tier 1 sources")
         logger.info(f"   - {len(self.tier2_sources)} Tier 2 sources")
         logger.info(f"   - {len(self.tier3_sources)} Tier 3 sources")
@@ -134,21 +122,10 @@ class CredibilityScorer:
     def get_domain_score(
         self, url: str, article_date: Optional[datetime] = None
     ) -> Dict[str, any]:
-        """
-        Improved scoring với blacklist và time decay
-
-        Args:
-            url: URL của bài báo
-            article_date: Ngày xuất bản (nếu có)
-
-        Returns:
-            Dict chứa score, tier, name, domain, flags
-        """
         try:
             parsed = urlparse(url)
             domain = parsed.netloc.lower().replace("www.", "")
 
-            # KIỂM TRA BLACKLIST TRƯỚC
             if domain in self.blacklist_domains:
                 info = self.blacklist_domains[domain]
                 logger.warning(f"⚠️ BLACKLISTED domain: {domain} - {info['reason']}")
@@ -162,12 +139,10 @@ class CredibilityScorer:
                     "reason": info["reason"],
                 }
 
-            # Kiểm tra trong database
             if domain in self.all_sources:
                 info = self.all_sources[domain]
                 base_score = info["score"]
 
-                # Time decay (nếu bật)
                 if self.enable_time_decay and article_date:
                     base_score = self._apply_time_decay(base_score, article_date)
 
@@ -179,8 +154,6 @@ class CredibilityScorer:
                     "is_trusted": True,
                     "is_blacklisted": False,
                 }
-
-            # Ưu tiên tên miền chính thống (.gov.vn, .edu.vn, .org.vn)
             if domain.endswith(".gov.vn"):
                 return {
                     "domain": domain,
@@ -212,7 +185,6 @@ class CredibilityScorer:
                     "note": "Organization domain",
                 }
 
-            # Kiểm tra social media
             if any(pattern in domain for pattern in self.social_patterns):
                 return {
                     "domain": domain,
@@ -224,7 +196,6 @@ class CredibilityScorer:
                     "note": "Social media/Blog",
                 }
 
-            # Unknown source - điểm trung bình thấp
             return {
                 "domain": domain,
                 "score": 4.0,
@@ -275,10 +246,10 @@ class CredibilityScorer:
     def get_tier_color(self, tier: int) -> str:
         """Trả về màu cho mỗi tier"""
         colors = {
-            1: "#22c55e",  # green
-            2: "#3b82f6",  # blue
-            3: "#f59e0b",  # orange
-            4: "#6b7280",  # gray
+            1: "#22c55e",  
+            2: "#3b82f6",  
+            3: "#f59e0b",  
+            4: "#6b7280",  
         }
         return colors.get(tier, "#9ca3af")
 
@@ -308,7 +279,7 @@ class CredibilityScorer:
             "reason": reason,
             "added_at": datetime.now().isoformat(),
         }
-        logger.info(f"➕ Added to blacklist: {domain} - {reason}")
+        logger.info(f" Added to blacklist: {domain} - {reason}")
 
     def get_statistics(self) -> Dict[str, int]:
         """Thống kê số lượng nguồn"""

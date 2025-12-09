@@ -9,7 +9,6 @@ import requests
 from bs4 import BeautifulSoup, element
 from curl_cffi import requests as cffi_requests
 
-# === THAY ĐỔI Ở ĐÂY: Import class InputValidator thay vì text_utils ===
 from input_validator import InputValidator
 
 logger = logging.getLogger(__name__)
@@ -26,7 +25,6 @@ class Crawler:
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
         ]
-        # Các mẫu URL thường là trang danh mục, không phải bài báo
         self.invalid_patterns = [
             "/topic/",
             "/category/",
@@ -52,25 +50,21 @@ class Crawler:
             has_sufficient_length = len(url_path) > 15
             return has_number and is_not_category and has_sufficient_length
         except Exception:
-            # Nếu URL có định dạng quá tệ (ví dụ: không phải string), trả về False
             return False
 
     def extract_from_url(self, url: str) -> Optional[Dict[str, str]]:
         if not self.is_valid_article_url(url):
             logger.warning(f"URL may not be a valid article: {url}")
 
-        # Chiến lược 1: Thử trực tiếp bằng curl_cffi (giả mạo trình duyệt)
         result = self._try_requests_method(url)
         if result:
             return result
 
-        # Chiến lược 2: Thử qua proxy của archive.org (nếu trang gốc bị lỗi 404/503)
         logger.warning("Method 1 failed, trying archive.org proxy...")
         result = self._try_archive_method(url)
         if result:
             return result
 
-        # Chiến lược 3: Thử lấy snippet (đoạn trích) từ Google Search
         logger.warning("Method 2 failed, trying search snippet extraction...")
         result = self._try_search_snippet_method(url)
         if result:
@@ -102,14 +96,12 @@ class Crawler:
                     timeout=30,
                     allow_redirects=True,
                     verify=True,
-                    impersonate="chrome120",  # Giả mạo Chrome 120 để vượt qua bot detection
+                    impersonate="chrome120",  
                 )
 
                 if response.status_code == 200:
-                    # Phân tích HTML nếu tải thành công
                     soup = BeautifulSoup(response.content, "html.parser")
 
-                    # Dọn dẹp các thẻ không chứa nội dung
                     for tag in soup(
                         [
                             "script",
@@ -131,7 +123,6 @@ class Crawler:
                         logger.info(
                             f"Successfully extracted {len(content)} characters (via curl_cffi)"
                         )
-                        # === THAY ĐỔI: Gọi hàm static từ InputValidator ===
                         return {
                             "title": InputValidator.normalize_text(title),
                             "description": InputValidator.normalize_text(description),
@@ -148,7 +139,6 @@ class Crawler:
                 logger.warning(f"Attempt {attempt + 1} failed: {str(e)}")
 
             if attempt < max_retries - 1:
-                # Chờ một khoảng ngẫu nhiên trước khi thử lại
                 time.sleep(random.uniform(2, 5))
 
         return None
@@ -187,7 +177,6 @@ class Crawler:
                         logger.info(
                             f"Archive.org extraction successful: {len(content)} chars"
                         )
-                        # === THAY ĐỔI: Gọi hàm static từ InputValidator ===
                         return {
                             "title": InputValidator.normalize_text(title),
                             "description": InputValidator.normalize_text(description),
@@ -226,7 +215,6 @@ class Crawler:
 
                     if title and snippet and len(snippet) > 100:
                         logger.info("Search snippet extraction successful")
-                        # === THAY ĐỔI: Gọi hàm static từ InputValidator ===
                         return {
                             "title": InputValidator.normalize_text(title),
                             "description": "",
@@ -273,7 +261,7 @@ class Crawler:
         texts = [
             p.get_text(strip=True)
             for p in paragraphs
-            if len(p.get_text(strip=True)) > 30  # Lọc các thẻ <p> rỗng hoặc quá ngắn
+            if len(p.get_text(strip=True)) > 30  
         ]
         return " ".join(texts)
 
@@ -281,7 +269,6 @@ class Crawler:
         content = ""
         domain = urlparse(url).netloc
 
-        # 1. Thử tìm thẻ <article>
         article = soup.find("article")
         if article:
             content = self._extract_paragraphs(article)
@@ -289,7 +276,6 @@ class Crawler:
                 logger.info(f"Content found in <article> tag: {len(content)} chars")
                 return content
 
-        # 2. Thử tìm các class CSS phổ biến
         if not content or len(content) < 200:
             content_divs = soup.find_all(
                 "div",
@@ -302,13 +288,12 @@ class Crawler:
                 temp_content = self._extract_paragraphs(div)
                 if len(temp_content) > len(best_content):
                     best_content = temp_content
-            content = best_content  # Cập nhật content ngay cả khi < 200
+            content = best_content  
 
             if len(content) > 200:
                 logger.info(f"Content found in common div class: {len(content)} chars")
                 return content
 
-        # 3. Thử theo bộ chọn (selector) cụ thể cho 5 trang báo
         if not content or len(content) < 200:
             domain_content = self._extract_domain_specific(soup, domain)
             if len(domain_content) > len(content):
@@ -319,7 +304,6 @@ class Crawler:
                     )
                     return content
 
-        # 4. Fallback: Lấy tất cả các thẻ <p>
         if not content or len(content) < 200:
             paragraphs = soup.find_all("p")
             texts = [
@@ -327,7 +311,7 @@ class Crawler:
                 for p in paragraphs
                 if len(p.get_text(strip=True)) > 30
             ]
-            content = " ".join(texts[:50])  # Lấy 50 đoạn đầu tiên
+            content = " ".join(texts[:50])  
             logger.info(f"Fallback extraction (all <p>): {len(content)} chars")
 
         return content

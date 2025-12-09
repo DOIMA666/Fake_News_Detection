@@ -586,7 +586,7 @@ Chúng tôi hoan nghênh mọi đóng góp!
 ### How to Contribute
 
 1. **Fork** repository
-2. **Clone** fork về máy: `git clone https://github.com/DOIMA666/fake-news-checker.git
+2. **Clone** fork về máy: `git clone https://github.com/DOIMA666/Fake_News_Detection.git
 3. **Tạo branch** mới: `git checkout -b feature/AmazingFeature`
 4. **Commit** thay đổi: `git commit -m 'Add some AmazingFeature'`
 5. **Push** lên branch: `git push origin feature/AmazingFeature`

@@ -1,4 +1,3 @@
-# stance_analyzer.py
 import logging
 import requests
 import json
@@ -10,7 +9,6 @@ from typing import Dict, Any, List, Optional
 from enum import Enum
 
 logger = logging.getLogger(__name__)
-
 
 class Stance(str, Enum):
     SUPPORT = "support"
@@ -24,8 +22,6 @@ class GroqKeyManager:
     def __init__(self, api_keys_str: Optional[str]):
         self.keys = []
         if api_keys_str:
-            # Hỗ trợ phân cách bằng dấu phẩy hoặc xuống dòng
-            # Xóa khoảng trắng thừa
             raw_keys = api_keys_str.replace("\n", ",").split(",")
             self.keys = [k.strip() for k in raw_keys if k.strip().startswith("gsk_")]
 
@@ -42,7 +38,7 @@ class GroqKeyManager:
             return
         prev_index = self.current_index
         self.current_index = (self.current_index + 1) % len(self.keys)
-        logger.info(f"🔄 Rotated Key: #{prev_index + 1} -> #{self.current_index + 1}")
+        logger.info(f"Rotated Key: #{prev_index + 1} -> #{self.current_index + 1}")
 
     def get_key_count(self):
         return len(self.keys)
@@ -56,13 +52,11 @@ class StanceAnalyzer:
 
     def __init__(
         self,
-        groq_api_key: Optional[str] = None,  # Có thể nhận list key qua biến này
+        groq_api_key: Optional[str] = None,  
         groq_model: str = "llama-3.3-70b-versatile",
         **kwargs,
     ):
-        # Ưu tiên lấy key từ env nếu không truyền vào
         if not groq_api_key:
-            # Thử lấy từ GROQ_API_KEYS (số nhiều) hoặc GROQ_API_KEY (số ít)
             groq_api_key = os.getenv("GROQ_API_KEYS") or os.getenv("GROQ_API_KEY")
 
         self.key_manager = GroqKeyManager(groq_api_key)
@@ -71,12 +65,12 @@ class StanceAnalyzer:
 
         if not self.key_manager.keys:
             logger.error(
-                "❌ Critical Error: No valid GROQ_API_KEY found starting with 'gsk_'"
+                "Critical Error: No valid GROQ_API_KEY found starting with 'gsk_'"
             )
             raise ValueError("Missing GROQ_API_KEY.")
 
         logger.info(
-            f"✅ StanceAnalyzer ready: {groq_model} | {self.key_manager.get_key_count()} Keys Loaded"
+            f"StanceAnalyzer ready: {groq_model} | {self.key_manager.get_key_count()} Keys Loaded"
         )
 
     def analyze_stance_batch(
@@ -86,20 +80,18 @@ class StanceAnalyzer:
         if not articles:
             return []
 
-        # Batch size = 15 để tối ưu số lượng request (Llama 3 chịu tải tốt)
         BATCH_SIZE = 15
         results = []
 
         for i in range(0, len(articles), BATCH_SIZE):
             batch = articles[i : i + BATCH_SIZE]
-            logger.info(f"🚀 Groq batch {i//BATCH_SIZE + 1}: {len(batch)} articles")
+            logger.info(f"Groq batch {i//BATCH_SIZE + 1}: {len(batch)} articles")
 
             try:
                 batch_output = self._call_llm_batch_json(claim, batch, start_index=i)
                 results.extend(batch_output)
             except Exception as e:
-                logger.error(f"❌ Batch failed: {e}")
-                # Fallback về UNRELATED nếu lỗi mạng/hết quota hoàn toàn
+                logger.error(f"Batch failed: {e}")
                 for idx, art in enumerate(batch):
                     results.append(
                         {
@@ -110,7 +102,6 @@ class StanceAnalyzer:
                         }
                     )
 
-        # Map kết quả
         final_output = []
         for idx, art in enumerate(articles):
             item = next((x for x in results if x.get("index") == idx), None)
@@ -136,7 +127,6 @@ class StanceAnalyzer:
         return final_output
 
     def _call_llm_batch_json(self, claim: str, articles: List[Dict], start_index: int):
-        # 1. Check Cache
         def cache_key(art):
             base = f"{claim}|{art.get('title','')[:80]}"
             return hashlib.md5(base.encode()).hexdigest()
@@ -156,7 +146,6 @@ class StanceAnalyzer:
         if not need_inference:
             return list(parsed_cache.values())
 
-        # 2. Build Prompt
         articles_text_block = ""
         for local_idx, art in need_inference:
             real_idx = start_index + local_idx
@@ -198,10 +187,8 @@ Trả về JSON ARRAY duy nhất:
 KHÔNG giải thích thêm.
 """
 
-        # 3. Gọi Groq
         raw = self._call_groq_api_robust(prompt)
 
-        # 4. Parse Output
         try:
             match = re.search(r"\[.*\]", raw, flags=re.DOTALL)
             data = json.loads(match.group(0)) if match else json.loads(raw)
@@ -230,7 +217,6 @@ KHÔNG giải thích thêm.
                     "reasoning": "Groq Analysis",
                 }
 
-                # Save cache
                 for l_idx, art in need_inference:
                     if start_index + l_idx == sid:
                         self._stance_cache[cache_key(art)] = res
@@ -240,7 +226,7 @@ KHÔNG giải thích thêm.
             return results + list(parsed_cache.values())
 
         except Exception as e:
-            logger.error(f"❌ JSON Parse Error: {e}\nRAW: {raw[:200]}")
+            logger.error(f"JSON Parse Error: {e}\nRAW: {raw[:200]}")
             raise
 
     def _call_groq_api_robust(self, prompt: str) -> str:
@@ -251,10 +237,8 @@ KHÔNG giải thích thêm.
 
         system_msg = "You are a strict JSON response bot. Output ONLY valid JSON array."
 
-        # Config Retry - Tăng số lần thử vì có nhiều key
-        max_retries = 10  # Giảm xuống 10 lần thử lại là đủ
+        max_retries = 10  
 
-        # Biến đếm số lần lỗi 429 liên tiếp
         consecutive_429 = 0
 
         for attempt in range(max_retries):
@@ -292,18 +276,18 @@ KHÔNG giải thích thêm.
                         # Nếu bị 429 liên tiếp nhiều lần (tức là nhiều key đều bị), tăng thời gian chờ
                         wait_time = 5 * consecutive_429
                         logger.warning(
-                            f"⚠️ Key #{self.key_manager.current_index} Rate Limit. Rotated. Retrying in {wait_time}s..."
+                            f"Key #{self.key_manager.current_index} Rate Limit. Rotated. Retrying in {wait_time}s..."
                         )
                         time.sleep(wait_time)
                     else:
                         # Nếu chỉ có 1 key, bắt buộc chờ lâu
                         wait_time = 20 + (attempt * 10)
                         logger.warning(
-                            f"⚠️ Single Key Rate Limit. Sleeping {wait_time}s..."
+                            f"Single Key Rate Limit. Sleeping {wait_time}s..."
                         )
                         time.sleep(wait_time)
 
-                    continue  # Thử lại
+                    continue  
 
                 else:
                     consecutive_429 = 0  # Reset đếm lỗi 429 nếu gặp lỗi khác

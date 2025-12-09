@@ -5,7 +5,6 @@ import json
 from typing import Any, Dict, List, Optional
 
 
-# Import Groq Client
 try:
     from groq import Groq
 
@@ -45,7 +44,6 @@ class TextPreprocessor:
 
         # --- LOGIC CẮT CHUỖI KEY GROQ ---
         raw_key = os.getenv("GROQ_API_KEY", "")
-        # Chỉ lấy key đầu tiên nếu có danh sách phân cách bởi dấu phẩy
         self.groq_api_key = raw_key.split(",")[0].strip() if raw_key else None
 
         self.groq_model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
@@ -55,17 +53,16 @@ class TextPreprocessor:
             try:
                 self.groq_client = Groq(api_key=self.groq_api_key)
                 logger.info(
-                    f"✅ Preprocessor: Connected to Groq Cloud ({self.groq_model})"
+                    f"Preprocessor: Connected to Groq Cloud ({self.groq_model})"
                 )
             except Exception as e:
-                logger.error(f"❌ Groq Init Failed: {e}")
+                logger.error(f"Groq Init Failed: {e}")
         else:
-            logger.warning("⚠️ No AI configured. Using basic fallback.")
+            logger.warning("No AI configured. Using basic fallback.")
 
     def _extract_json(self, text: str) -> Optional[Dict]:
         """Trích xuất JSON từ phản hồi của LLM (xử lý cả trường hợp Markdown)"""
         try:
-            # Tìm đoạn nằm giữa { và }
             match = re.search(r"\{.*\}", text, re.DOTALL)
             if match:
                 return json.loads(match.group(0))
@@ -77,7 +74,6 @@ class TextPreprocessor:
         """
         Dùng LLM để phân tích input -> Trả về JSON {category, queries}
         """
-        # Giá trị mặc định nếu lỗi
         default_result = {
             "category": "other",
             "category_label": self.CATEGORIES["other"],
@@ -181,7 +177,6 @@ MẪU OUTPUT:
             else:
                 return None
 
-        # Cắt ngắn nếu quá dài để tiết kiệm token
         if len(content) > 3000:
             content = content[:3000]
 
@@ -189,7 +184,6 @@ MẪU OUTPUT:
             InputValidator.normalize_text(content) if input_type == "text" else content
         )
 
-        # Gọi AI phân tích
         logger.info("Analyzing input via Groq...")
         analysis = self.analyze_input(content)
 
@@ -204,8 +198,8 @@ MẪU OUTPUT:
             "content": content,
             "full_text": content,
             "summary_text": content,
-            "keywords": analysis["queries"],  # ✅ Lấy từ dict
-            "category": analysis["category"],  # ✅ Lấy từ dict
+            "keywords": analysis["queries"],  
+            "category": analysis["category"],  
             "category_label": analysis["category_label"],
             "domain": domain,
         }

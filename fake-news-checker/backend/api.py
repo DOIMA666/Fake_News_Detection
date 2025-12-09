@@ -14,42 +14,36 @@ from fact_checker import FactChecker
 from database import DatabaseManager
 from input_validator import InputValidator
 
-# === GLOBAL INSTANCES ===
+
 fact_checker_instance: Optional[FactChecker] = None
 db: Optional[DatabaseManager] = None
 
 input_validator = InputValidator()
-
-# === LIFECYCLE ===
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global fact_checker_instance, db
     print("Starting up Fact Checker API...")
 
-    # Initialize Database
+
     try:
         db = DatabaseManager("fact_checker.db")
         stats = db.get_statistics()
-        print(f"✅ Database initialized: {stats['totalChecks']} records")
+        print(f" Database initialized: {stats['totalChecks']} records")
     except Exception as e:
-        print(f"❌ Error initializing Database: {e}")
+        print(f" Error initializing Database: {e}")
         traceback.print_exc()
 
-    # Initialize FactChecker
+
     try:
         fact_checker_instance = FactChecker()
-        print("✅ Fact Checker initialized successfully!")
+        print(" Fact Checker initialized successfully!")
     except Exception as e:
-        print(f"❌ Error initializing FactChecker: {e}")
+        print(f" Error initializing FactChecker: {e}")
         traceback.print_exc()
 
     yield
     print("Shutting down API.")
-
-
-# === FASTAPI APP ===
 
 app = FastAPI(
     title="Fake News Detection API with Dashboard",
@@ -66,10 +60,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# === MODELS ===
-
-
 class FactCheckRequest(BaseModel):
     content: str
     input_type: Literal["text", "url"] = "text"
@@ -80,7 +70,6 @@ class FactCheckRequest(BaseModel):
 class FeedbackRequest(BaseModel):
     check_id: int
     is_correct: bool
-# === ENDPOINTS ===
 
 
 @app.get("/", tags=["Health"])
@@ -119,7 +108,6 @@ async def health_check():
 async def check_fact(request: FactCheckRequest):
     """Main fact checking endpoint"""
     try:
-        # 1. Kiểm tra cơ bản
         if not request.content:
             raise HTTPException(status_code=400, detail="Content is required")
 
@@ -130,25 +118,23 @@ async def check_fact(request: FactCheckRequest):
         print(f"  Num sources: {request.num_sources}")
         print(f"{'='*60}\n")
 
-        # 2. VALIDATE INPUT (Sử dụng InputValidator)
-        # Bước này cực quan trọng để chặn spam/rác trước khi gọi AI tốn tiền
         is_valid, error_msg, suggestion = input_validator.validate(
             request.content, request.input_type
         )
 
         if not is_valid:
-            print(f"[API] ❌ Validation failed: {error_msg}")
-            # Trả về kết quả lỗi ngay lập tức mà không cần chạy pipeline
+            print(f"[API]  Validation failed: {error_msg}")
+            
             return JSONResponse(
                 content={
                     "success": False,
                     "message": error_msg,
                     "suggestion": suggestion,
-                    "verdict": None,  # Không có verdict vì chưa check
+                    "verdict": None,  
                 }
             )
 
-        # 3. Chạy pipeline (chỉ chạy khi input hợp lệ)
+        
         result = fact_checker_instance.check_fact(
             user_input=request.content,
             input_type=request.input_type,
@@ -156,11 +142,9 @@ async def check_fact(request: FactCheckRequest):
         )
 
         print(f"\n[API] Result status: {result['status']}")
-
-        # 4. Format kết quả
+        
         formatted_result = fact_checker_instance.format_result_for_frontend(result)
 
-        # 5. LƯU VÀO DATABASE (Chỉ lưu khi có kết quả xử lý thành công từ pipeline)
         if formatted_result.get("success") and db:
             processed_data = formatted_result.get("processed_data", {})
 
@@ -173,15 +157,16 @@ async def check_fact(request: FactCheckRequest):
                 "timestamp": datetime.now().isoformat(),
                 "num_references": len(formatted_result.get("references", [])),
                 "processed_data": processed_data,
+                "full_result": formatted_result
             }
 
             try:
                 check_id = db.add_check(history_item)
                 cat = processed_data.get("category", "other")
                 formatted_result["db_id"] = check_id
-                print(f"[API] ✅ Saved to database (ID: {check_id}, Category: {cat})")
+                print(f"[API]  Saved to database (ID: {check_id}, Category: {cat})")
             except Exception as e:
-                print(f"[API] ⚠️ Failed to save to database: {e}")
+                print(f"[API] Failed to save to database: {e}")
                 traceback.print_exc()
 
         return JSONResponse(content=formatted_result)
@@ -207,7 +192,6 @@ async def submit_feedback(feedback: FeedbackRequest):
         if success:
             return {"success": True, "message": "Đã ghi nhận phản hồi"}
         else:
-            # Có thể ID không tồn tại hoặc lỗi DB
             return JSONResponse(
                 status_code=404, 
                 content={"success": False, "message": "Không tìm thấy bài kiểm tra này"}
@@ -283,11 +267,9 @@ async def get_history_endpoint(skip: int = 0, limit: int = 20):
         if limit > 100:
             limit = 100
 
-        # Sử dụng get_recent_checks với offset
         all_recent = db.get_recent_checks(skip + limit)
         paginated = all_recent[skip : skip + limit]
 
-        # Format cho frontend
         formatted_data = []
         for item in paginated:
             formatted_data.append(
@@ -297,9 +279,10 @@ async def get_history_endpoint(skip: int = 0, limit: int = 20):
                     "verdict_code": item.get("verdict"),
                     "verdict_label": _get_verdict_label(item.get("verdict")),
                     "confidence_percentage": item.get("confidence", 0),
-                    "timestamp": item.get("timestamp", datetime.now().isoformat()),
-                    "input_type": "text",
-                    "num_references": 0,
+                    "timestamp": item.get("timestamp"),
+                    "input_type": item.get("input_type", "text"),
+                    "num_references": item.get("num_references", 0),
+                    "result": item.get('result')
                 }
             )
 

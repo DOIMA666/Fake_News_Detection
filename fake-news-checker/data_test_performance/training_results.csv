@@ -1,0 +1,312 @@
+claim,true_label,system_score,verdict_code,processing_time
+Ngân hàng Nhà nước gửi đường link cập nhật thông tin sinh trắc học để lừa đảo,-1,-0.3890094608068466,LIKELY_FALSE,7.24
+Vụ bắt cóc trẻ em ở Huế,-1,-0.3916772349891456,LIKELY_FALSE,6.72
+Cục Đăng kiểm Việt Nam thay đổi mẫu tem kiểm định và đề nghị chủ xe muốn đổi tem mới thì thanh toán 10.000 đồng/tem về tài khoản của Cục.,-1,-0.43912282075430886,LIKELY_FALSE,6.3
+"nhân viên ngân hàng thông báo có phát sinh khoản phí bất thường trên thẻ tín dụng của anh M, phải khoá thẻ tạm thời trong 24 giờ để hủy khoản phí trên.",-1,-0.5088710367679596,LIKELY_FALSE,6.28
+"Nội dung công văn về việc “THÔNG BÁO CHI TRẢ TRUY THU BẢO HIỂM XÃ HỘI” do ông Đặng Đình Thuận, Phó Giám đốc Bảo hiểm xã hội TP. Hà Nội ký ngày 5/2/2025.",-1,0.0,ERROR,6.66
+" đi lao động tại Hàn Quốc, du lịch không cần visa tại đảo Jeju (Hàn Quốc) đảm bảo cấp visa trong thời gian rất ngắn hoặc đảm bảo tỷ lệ thành công cao mà không cần kiểm tra hồ sơ cẩn thận.",-1,0.25245167732238777,LIKELY_TRUE,6.26
+hình thức “hỗ trợ lấy lại tiền bị lừa đảo” trên mạng xã hội,-1,-0.30225032712962174,LIKELY_FALSE,6.3
+chuyển tiền đăng ký tham gia các giải chạy của Vietcombank tổ chức,-1,-0.18350910343553709,LIKELY_FALSE,11.67
+văn bản tăng lương hưu yêu cầu cập nhật VssID 4.0,-1,-0.27463194426923687,LIKELY_FALSE,18.82
+ nhóm mua vàng online và được hứa hẹn sẽ có lợi nhuận cao.,-1,-0.24080227318647746,LIKELY_FALSE,11.68
+"gọi điện , thông báo ứng dụng VNeID bị lỗi và hướng dẫn  tải ứng dụng sửa lỗi online. ",-1,0.08576618336862134,LIKELY_TRUE,7.05
+"các bài viết và đoạn clip trên trang mạng xã hội Facebook như Otofun, Anh em lái xe Việt Nam, Taxi Mai Linh TP.HCM có nội dung ông Trần Minh Cảnh chia sẻ một số thông tin ",-1,-0.5207370729673477,LIKELY_FALSE,5.12
+cộng tác viên online với công việc mua bán hàng hóa sẽ được hưởng tiền hoa hồng.,-1,-0.3348827722499955,LIKELY_FALSE,5.25
+"công an địa phương liên hệ báo phải tích hợp thông tin giấy tờ mới vào hệ thống VNeID. Tuy nhiên, lại yêu cầu vào VneID theo đường link/cài phần mềm tải trên kho ứng dụng.",-1,0.22827213406562805,LIKELY_TRUE,5.53
+cán bộ Công an thông báo anh có liên quan đến một vụ án rửa tiền do CATP Hải Phòng thụ lý.,-1,0.2232998459876239,LIKELY_TRUE,5.39
+đặt phòng resort qua Facebook,-1,-0.2927352654217165,LIKELY_FALSE,5.37
+"nhân viên của các bệnh viện dinh dưỡng, trung tâm y tế, trung tâm tiêm chủng… gọi điện đến người dân thông báo được tặng yến sào hoặc các loại thực phẩm bổ sung",-1,-0.10858887434005737,LIKELY_FALSE,5.64
+hình thức mua quần áo bốc thăm trúng thưởng xe máy Honda SH Mode,-1,-0.4762623669709578,LIKELY_FALSE,5.09
+"công an, gọi điện thoại cho sinh viên nói liên quan đến đường dây ma túy và yêu cầu họ ""hợp tác điều tra"" và cảnh báo do tính chất nghiêm trọng của vụ án, đề nghị sinh viên không được liên lạc với bất kỳ ai và ra khách sạn ở một mình để thuận lợi cho việc lấy lời khai.",-1,0.30426176144526557,LIKELY_TRUE,5.74
+vải thiều Bắc Giang  vừa ngâm lạnh vừa ngâm thuốc...vải ngâm hóa chất…,-1,-0.12047290802001953,LIKELY_FALSE,64.05
+một số trang mạng Facebook đã đăng tải nội dung về thư kêu gọi của hai phụ huynh có con trai tên Nguyễn Thành Kiên (quê Bình Thuận) không may bị rơi từ tầng 3 khi làm việc tại Campuchia,-1,-0.07505674362182618,LIKELY_FALSE,5.43
+"EVNFinance, EasyCredit, HomeCredit, Mcredit, FECredit cho vay với lãi suất thấp, không cần thế chấp, không thẩm định, chỉ cần có căn cước công là có thể vay được tiền.",-1,-0.4534147423047286,LIKELY_FALSE,5.42
+sản phẩm “Thực phẩm bảo vệ sức khỏe Happy Mom” đang được phân phối tại nhà thuốc FPT Long Châu là hàng giả. ,-1,-0.560454899031255,LIKELY_FALSE,5.27
+ cán bộ điện lực gọi điện thông báo nợ tiền điện và yêu cầu chuyển khoản gấp để tránh bị cắt điện,-1,-0.3545592982813997,LIKELY_FALSE,5.65
+Bộ GD-ĐT triển khai quỹ học bổng tiếng Anh hỗ trợ 80% học phí,-1,-0.4099895717804891,LIKELY_FALSE,5.29
+"Cục An ninh mạng và phòng, chống tội phạm sử dụng công nghệ cao Bộ Công an hỗ trợ tiếp nhận thông tin điều tra, giúp đỡ các nạn nhân bị lừa đảo qua mạng xã hội trên facebook",-1,-0.4521965058950278,LIKELY_FALSE,5.71
+Bưu điện Việt Nam gửi tin nhắn thông báo kích hoạt thẻ hội viên,-1,-0.3833413508585716,LIKELY_FALSE,27.36
+"Đài Phát thanh và Truyền hình Hà Nội đăng tải thông tin tiếp nhận giải quyết các vụ lừa đảo, hứa hẹn giúp thu hồi tiền với thủ tục ""nhanh chóng, đơn giản"".",-1,-0.25063219856132163,LIKELY_FALSE,5.63
+"các bệnh viện từ Trung ương như Bệnh viện K, Bệnh viện 108, Bệnh viện Bạch Mai, Bệnh viện Phụ sản Trung ương đến các bệnh viện địa phương như Bệnh viện đa khoa tỉnh Sơn La, Bệnh viện đa khoa tỉnh Thanh Hóa, Bệnh viện đa khoa khu vực Thủ Đức...kêu gọi từ thiện",-1,-0.3943601659366062,LIKELY_FALSE,5.55
+"thành viên nhóm hỗ trợ của chương trình  ""Bình dân học AI""  liên hệ với học viên qua mạng xã hội, tin nhắn  mời chào các gói hỗ trợ ""luyện AI lên đẳng"" và yêu cầu đóng phí.",-1,-0.5826941132545471,LIKELY_FALSE,5.7
+thông báo mã trúng thưởng từ ứng dụng MoMo Pro,-1,-0.3512253355979919,LIKELY_FALSE,5.52
+ cán bộ tuyển sinh của sở hoặc các trường học hay đội hỗ trợ tuyển sinh  gọi điện cho phụ huynh.,-1,-0.3862275037169457,LIKELY_FALSE,5.02
+nhân viên Điện lực yêu cầu thanh toán tiền điện vào tài khoản cá nhân,-1,-0.35204053784410155,LIKELY_FALSE,5.28
+nhân viên điện lực yêu cầu cài đặt phần mềm điện lực EVN,-1,-0.3284663486130098,LIKELY_FALSE,5.31
+vụ việc cụ bà ăn xin ở Nam Định có 9 bao tải tiền,-1,-0.19489931953364403,LIKELY_FALSE,4.95
+bệnh viện K nhận đút lót mới khám chữa cho bệnh nhân ung thư,-1,-0.11917439449090467,LIKELY_FALSE,5.11
+ekip  bộ phim Lật Mặt 8 yêu cầu người tham gia nộp phí đăng ký casting online,-1,-0.46103782653808595,LIKELY_FALSE,5.31
+4 người trong 1 gia đình mắc Covid-19 ở huyện Mỹ Đức,-1,-0.3409387472428774,LIKELY_FALSE,5.13
+12 shipper ở Quận 7 Thành phố Hồ Chí Minh dương tính với COVID-19 ,-1,0.24593071937561037,LIKELY_TRUE,6.1
+Phong tỏa TP.HCM 14 ngày,-1,-0.2629742012098973,LIKELY_FALSE,5.14
+Israel hứng tổn thất khi đột kích ngôi làng Syria,1,0.5459328492482504,LIKELY_TRUE,4.75
+Thủ tướng Australia kết hôn,1,0.4820988349188333,LIKELY_TRUE,5.02
+Nga có thể đã phóng xịt tên lửa xuyên lục địa,1,0.26160515225122843,LIKELY_TRUE,4.95
+Mỹ dừng xem xét cấp quy chế tị nạn,1,0.4437418102296356,LIKELY_TRUE,5.16
+Ông Trump tuyên bố hủy mọi văn kiện ký tự động của ông Biden,1,0.409425726889739,LIKELY_TRUE,5.06
+Hong Kong để tang ba ngày tưởng niệm nạn nhân vụ cháy chung cư,1,0.608700768450623,LIKELY_TRUE,6.92
+Chánh văn phòng của ông Zelensky từ chức,1,0.4408777231908528,LIKELY_TRUE,5.78
+Hong Kong bắt thêm 8 người liên quan vụ cháy cụm chung cư,1,0.6590004563331604,LIKELY_TRUE,5.85
+Thủ tướng Phạm Minh Chính sẽ đồng chủ trì Kỳ họp lần thứ 48 Ủy ban liên Chính phủ Việt Nam - Lào tại Vientiane,1,0.712207362630911,LIKELY_TRUE,6.61
+"Trung Quốc được cho là đã đóng băng các chương trình giao lưu thanh niên với Nhật,",1,0.3895227611064911,LIKELY_TRUE,5.9
+Nghi phạm bắn chết vệ binh Mỹ có thể từng là đặc nhiệm Afghanistan,1,0.2057190807660421,LIKELY_TRUE,5.87
+Mỹ rà soát lại toàn bộ thẻ xanh cấp cho người nhập cư từ 19 nước,1,0.38147091627316126,LIKELY_TRUE,5.66
+"Tại Đông Nam Á, Việt Nam đứng sau Singapore, Malaysia, Philippines trong Chỉ số Năng lực Cạnh tranh Nhân tài Toàn cầu 2025 ",1,0.3006340250533113,LIKELY_TRUE,18.17
+Công ty vận hành metro Bến Thành - Suối Tiên lỗ 140 tỷ đồng,1,0.49361209617397633,LIKELY_TRUE,11.47
+MSB ra mắt thẻ tín dụng Mastercard Green World,1,0.5400735308496939,LIKELY_TRUE,11.01
+"Chiến dịch ""Chọn xanh cho khỏe"" năm 2025 được Manulife Việt Nam triển khai với loạt hoạt động như tổ chức khám sức khỏe miễn phí, chương trình nâng cao nhận thức sức khỏe tiêu hóa.",1,0.5898550742754229,LIKELY_TRUE,5.82
+Vietravel thoát hết vốn tại Vietravel Airlines,1,0.42464333215485456,LIKELY_TRUE,5.65
+Shynh Group nhận giải thưởng từ tập đoàn thẩm mỹ Merz Aesthetics,1,0.37218358218669895,LIKELY_TRUE,5.73
+MIK Group hợp tác LynkiD triển khai chương trình khách hàng thân thiết,1,0.3880511202937678,LIKELY_TRUE,6.26
+Neymar vẫn thi đấu và ghi bàn mở tỷ số trong trận Santos thắng đội khách Sport Recife 3-0 ở vòng 36 giải vô địch Brazil.,1,0.4530241985784637,LIKELY_TRUE,10.68
+"Trận tứ kết Cup Quốc gia Bolivia hai đội Blooming và Real Oruro xô xát, khiến trọng tài phải rút 17 thẻ đỏ.",1,0.5800486624240874,LIKELY_TRUE,5.76
+"Kỳ thủ 19 tuổi người Uzbekistan, Javokhir Sindarov thắng Vi Dịch (Trung Quốc) ở loạt tie-break chung kết World Cup cờ vua.",1,0.523991071883543,LIKELY_TRUE,5.8
+'Mưa đỏ' đoạt Bông Sen Vàng 2025,1,0.537507415719582,LIKELY_TRUE,6.66
+"Danh ca Mỹ Alicia Keys sẽ trình diễn tại lễ trao giải khoa học - công nghệ VinFuture ở Nhà hát Hồ Gươm, tối 5/12.",1,0.5692148873680516,LIKELY_TRUE,5.69
+"Chuỗi concert ""After Hours Til Dawn"" của The Weeknd đạt hơn một tỷ USD, là tour ăn khách nhất mọi thời do nghệ sĩ nam solo tổ chức.",1,0.5522061445392096,LIKELY_TRUE,5.89
+Biệt thự của diễn viên Trương Ngọc Ánh bị khám xét,1,0.5430480569104353,LIKELY_TRUE,5.66
+Coca-Cola Việt Nam thua kiện vụ bị truy thu 821 tỷ đồng tiền thuế,1,0.4311216749439924,LIKELY_TRUE,5.76
+"Công an thu 300 cây vàng, 100 sổ đỏ, 12 siêu xe trong vụ án Mailisa",1,0.47926132108006514,LIKELY_TRUE,5.54
+Giúp nạn nhân tai nạn giao thông đi cấp cứu được hỗ trợ đến 5 triệu đồng,1,0.3816252930008846,LIKELY_TRUE,11.04
+Thủ phạm đầu độc 4 người thân bằng xyanua bị tuyên tử hình,1,0.47587622843723926,LIKELY_TRUE,15.46
+lũ ngập cầu nối Đồng Nai với TP HCM,-1,-0.22634973693312258,LIKELY_FALSE,10.06
+Tổng giám đốc địa ốc Phong Hải Thịnh bị bắt,1,0.4067387299104171,LIKELY_TRUE,10.29
+"Kim Soo-hyun bị kiện 2,1 triệu USD vì bê bối đời tư ảnh hưởng nhãn hàng",1,0.4737169582441628,LIKELY_TRUE,9.85
+"""vỡ đập Am Chúa"", ""vỡ đập Suối Dầu"", ""Tin khẩn, người dân khu vực Chợ Ga, Nha Trang bắt buộc phải di dời",-1,-0.35845478529464386,LIKELY_FALSE,11.0
+Vợ chồng chủ Thẩm mỹ viện Mailisa bị bắt,1,0.3896968428113244,LIKELY_TRUE,11.98
+"Hoa hậu Thùy Tiên, Hằng Du Mục, Quang Linh Vlogs bị phạt 2 năm tù",1,0.10603019952774047,LIKELY_TRUE,11.03
+"Đại học đa ngành sẽ không được phép đào tạo bác sĩ, cử nhân luật",1,0.4622848710731456,LIKELY_TRUE,15.54
+Apollo English nhận giải 'Doanh nghiệp được quản trị tốt nhất',1,0.4132727006281892,LIKELY_TRUE,9.75
+"Năm 2026, trường Sĩ quan Chính trị sẽ không sử dụng tổ hợp A00 (Toán, Lý, Hóa) và C00 (Văn, Sử, Địa) để tuyển sinh.",1,0.6974974045010863,LIKELY_TRUE,6.5
+thầy trò ở trường Đại học Bách khoa TP HCM chế tạo thiết bị nướng cà phê bằng nước,1,0.4717146717895896,LIKELY_TRUE,6.89
+Ông Nguyễn Đức Trung thôi giữ chức Chủ tịch Hà Nội,1,0.5430771638320969,LIKELY_TRUE,6.31
+"Thủ tướng Phạm Minh Chính đến xã Hòa Thịnh và Tây Hòa, chia sẻ với các gia đình có người chết, nhà sập trong đợt lũ lịch sử, chiều 29/11.",1,0.3915771327277485,LIKELY_TRUE,18.49
+Khởi công mở rộng cao tốc TP HCM - Trung Lương - Mỹ Thuận ngày 19/12,1,0.33974822900797197,LIKELY_TRUE,6.59
+Ông Vũ Đại Thắng làm Chủ tịch thành phố Hà Nội,1,0.40466716026482374,LIKELY_TRUE,6.9
+Trưởng phòng trọng án Cục Hình sự làm Phó giám đốc Công an Sơn La,1,0.6479657749607138,LIKELY_TRUE,11.07
+Phó chủ nhiệm Văn phòng Quốc hội làm Phó ban Tuyên giáo và Dân vận Thành ủy Hà Nội,1,0.0,ERROR,7.83
+Công ty thanh toán số của MobiFone được cung ứng dịch vụ hạ tầng thanh toán,1,0.5044635802507401,LIKELY_TRUE,6.29
+LPBank đồng hành đoàn thể thao Việt Nam tại SEA Games 33,1,0.5546203449266215,LIKELY_TRUE,15.75
+Carlsberg Việt Nam đẩy mạnh cam kết năng lượng sạch tại GEF 2025,1,0.5326732290125337,LIKELY_TRUE,12.73
+sinh viên Trường đại học Đồng Tháp bị bắt cóc và hành hung,-1,-0.5840649882952372,LIKELY_FALSE,6.35
+Trẻ em có thể được nhận 2 triệu đồng từ Quỹ Bảo trợ trẻ em Việt Nam nhân dịp Tết Trung thu 2025 khi đáp ứng một số điều kiện,-1,-0.3167135878042741,LIKELY_FALSE,10.85
+"từ năm 2026, bảo hiểm y tế sẽ không còn chi trả cho các ca bệnh nặng hoặc phẫu thuật",-1,-0.5476087428125224,LIKELY_FALSE,6.69
+"vỡ đập Thủy điện Bản Vẽ (xã Yên Na, tỉnh Nghệ An)",-1,-0.29019361070018207,LIKELY_FALSE,6.91
+"lực lượng bảo đảm an ninh trật tự buổi sơ duyệt Lễ diễu binh, diễu hành mừng kỷ niệm 80 năm Cách mạng Tháng Tám thành công và Quốc khánh 2/9 trên phố Nguyễn Thái Học không cho bác cựu chiến binh 90 tuổi vào xem vì không mua chỗ.",-1,-0.11688463687896729,LIKELY_FALSE,6.96
+thông tin lực lượng Công an từ chối hỗ trợ người dân ở phường Hàm Rồng (Thanh Hóa) ,-1,-0.2751019155360617,LIKELY_FALSE,7.52
+"bắt cóc trẻ em đòi tiền chuộc tại phường Tuần Châu, thành phố Hạ Long vào chiều 2/10 ",-1,-0.3895659448426793,LIKELY_FALSE,7.94
+"cảnh báo Thới Bình, Cà Mau mới xổng chuồng 12 con cá sấu (cá lớn nuôi lâu năm)",-1,-0.6025110687528338,LIKELY_FALSE,6.69
+Máy bay Malaysia MH370 biến mất 9 năm trước đã được tìm thấy dưới đáy đại dương mà không có bộ xương người nào. Có 239 hành khách trên chuyến bay này,-1,-0.49819516837596894,LIKELY_FALSE,6.15
+"Giáo hoàng Francis bước ra ngoài trong chiếc áo khoác phao dài màu trắng của thương hiệu Balenciaga, với dây chuyền thánh giá quanh cổ.",-1,-0.0025325173778193164,UNCERTAIN,6.26
+SCA đã ký hợp đồng với một công ty để quản lý các dịch vụ của Kênh đào Suez theo một hợp đồng nhượng quyền có thời hạn 99 năm.,-1,0.3580618445612804,LIKELY_TRUE,7.88
+"Argentina đã phát hành tờ tiền giấy kỷ niệm mệnh giá 1.000 peso có in hình Leo Messi và chữ ký của anh ấy, sau chiến tích vô địch World Cup",-1,-0.18768181106666237,LIKELY_FALSE,6.23
+"Starbuck sẽ chuyển sang thanh toán không dùng tiền mặt. Từ ngày 1/10/2022, Starbuck sẽ chỉ chấp nhận hình thức thanh toán không tiếp xúc và thanh toán bằng điểm thưởng Starbucks. Vui lòng liên hệ với đội ngũ của Starbuck để biết thêm chi tiết",-1,-0.6913681626319885,LIKELY_FALSE,6.31
+"một tân sinh viên k25 khoa KHTN Trường Đại học Sư Phạm bị lừa đưa sang Campuchia, bị chuốc thuốc mê rồi giam giữ, đòi tiền chuộc 250 triệu đồng, nếu không sẽ bán nội tạng",-1,-0.3410165379932012,LIKELY_FALSE,6.34
+"""Nay hot clip về Bác sĩ nội trú, mình có em trai đang làm bác sĩ nội trú (bviện Bạch Mai) mình chia sẻ 1 số fact:
+
+Bệnh viện khác thì ko biết, chứ viện Bạch Mai đối xử với bsi nội trú siêu tệ, ko lương, ko trợ cấp, thậm chí gửi xe cũng bị bắt gửi khu bệnh nhân mất tiền (dù em mình ngồi khám và kê đơn cho bệnh nhân như bsi bình thường luôn)
+
+Bố mẹ mình nuôi 1 bác sĩ học hành đến nay là 9 năm bao tiền của, rất tốn kém (chưa kể còn tiền chạy việc vào viện nữa)""",-1,-0.25122936377806193,LIKELY_FALSE,7.14
+"Chiều hôm nay 25/8 cơ quan Pháp luật và bộ công an đã tiến hành lệnh bắt và tạm giữ người trong trường hợp khẩn cấp đối với ông 1 chủ tịch phường trực thuộc TP.HUẾ về hành vi lạm dụng chức vụ chiếm đoạt tài sản, chốn thuế và nhận hối lộ ! Khám xét nơi làm việc công an thu giữ nhiều giấy tờ giả tạo dựng nhiều hồ sơ khống, tiến hành khám xét nhà riêng cơ...""",-1,-0.3906609120236914,LIKELY_FALSE,12.59
+"Cần khẩn cấp chia sẻ tìm con trai Nguyễn Tuấn Khôi (6 tuổi) tại Đắk Lắk bị bắt cóc Khoảng 17h04 ngày 05/08/2025, con trai tôi là Nguyễn Tuấn Khôi, 6 tuổi, đã bị hai người đàn ông lạ mặt bắt cóc khi đang chơi trước nhà.
+
+Địa điểm xảy ra vụ việc: X. Cư Klông H. Krông Năng Đắk Lắk
+
+Đặc điểm nhận dạng của bé:
+
+Tên: Nguyễn Tuấn Khôi
+
+Tuổi: 6 tuổi
+
+Đang mặc áo như trong ảnh
+
+Thông tin về đối tượng:
+
+Hai người đàn ông lạ mặt, đeo khẩu trang.""",-1,-0.4809774581480909,LIKELY_FALSE,6.33
+"video cụ bà ở xã Xuân Phú, TP Đà Nẵng nhà bị ngập lũ nhiều ngày ""không ăn uống"" được chia sẻ rộng rãi.",-1,-0.3668213378335979,LIKELY_FALSE,12.3
+Cháu bé ‘trôi từ Quảng Nam ra Đà Nẵng được cứu sống’,-1,-0.21146117973148373,LIKELY_FALSE,6.96
+shipper nhảy cầu' sau vụ tai nạn trên cầu Vĩnh Tuy,-1,-0.25298249092820574,LIKELY_FALSE,11.51
+"Shark Bình: Tôi bảo Oanh ở nhà lo nội trợ, mỗi tháng tôi cho 1 tỷ tiêu vặt nhưng em ấy không chịu. Quyết định trở lại đóng phim để không mang tiếng ăn bám chồng. Những người vợ khác nhìn vợ tôi mà học hỏi theo""",-1,-0.2356291983459817,LIKELY_FALSE,11.66
+"chương trình trao đổi sinh viên giữa Trường đại học Phú Yên (PYU) và Đại học Quốc gia Pusan (PNU), Hàn Quốc",-1,-0.5189497163688594,LIKELY_FALSE,6.78
+một thanh niên thu về hơn 50 triệu tiền hoa hồng chỉ sau 1 ngày tố giác vi phạm giao thông,-1,-0.21281688405179433,LIKELY_FALSE,7.27
+Mạng xã hội xuất hiện thông tin hướng dẫn mua bộ đề ôn thi viên chức ngành giáo dục năm 2024 tại Quảng Ngãi với giá từ 300.000-400.000 đồng,-1,-0.7801917135641213,LIKELY_FALSE,6.93
+đội U9 Sông Lam Nghệ An giải tán vì thiếu kinh phí,-1,-0.607906699180603,LIKELY_FALSE,28.17
+Bê bối trên THVL: Nhà tim mạch nổi tiếng của Việt Nam đã bị đánh vào mặt tại phòng thu THVL vì phát hiện ra phương pháp làm sạch máu ở mọi lứa tuổ,-1,0.32682907581329346,LIKELY_TRUE,5.75
+"đại nhạc hội Hàn Quốc - Việt Nam tổ chức ở Bình Định với sự tham gia của Aespa, Twice, Sơn Tùng - MTP",-1,-0.006336376173742888,UNCERTAIN,5.3
+các đồng chí lãnh đạo tỉnh liên quan đến các tập đoàn vi phạm pháp luật; công an khám nhà lãnh đạo tỉnh Điện Biên,-1,-0.4066178798675537,LIKELY_FALSE,7.55
+"Trường ĐH Y dược Thái Bình xảy ra việc lưu học sinh đang theo học tại trường có quan hệ tình cảm vượt quá mức giới hạn với cán bộ, giáo viên trong trường.",-1,-0.5666562330924859,LIKELY_FALSE,6.35
+Xuất hiện phụ nữ bắt cóc học sinh ở phường Văn Quán,-1,-0.23090425953269003,LIKELY_FALSE,5.88
+" cầu thủ Nguyễn Quang Hải bị cảnh sát giao thông dừng xe ôtô do vi phạm lỗi vượt đèn đỏ trên phố Bạch Mai (quận Hai Bà Trưng, Hà Nội). ",-1,0.02133948927124343,UNCERTAIN,6.46
+"Voi rừng bị điện giật chết tại xã Thanh Sơn, tỉnh Đồng Nai. ",-1,-0.43344293236732484,LIKELY_FALSE,5.86
+lũ lụt làm ngập cầu Hóa An (phường Biên Hòa),-1,-0.5551397969488238,LIKELY_FALSE,6.44
+10 người chết do dính axít khi lặn vớt tôm hùm ở phường Sông Cầu ,-1,-0.6442660364422867,LIKELY_FALSE,5.71
+án mạng xảy ra tại bãi đỗ xe thuộc Khu du lịch Bà Nà Hills.,-1,-0.42629323592647966,LIKELY_FALSE,5.67
+trào lưu uống nước chanh muối hột để chữa nhiều bệnh mạn tính,-1,-0.1895422254999479,LIKELY_FALSE,70.95
+Chính phủ sẽ chi tặng mỗi người dân 1 triệu đồng nhân dịp Tết Nguyên đán,-1,-0.5166839292129644,LIKELY_FALSE,6.02
+tàu tung của trôi dạt về An Dương Vương,-1,-0.47105631310078827,LIKELY_FALSE,5.49
+"rừng phòng hộ bị xẻ bán và có người đứng sau bảo kê tại khu vực đỉnh Bình Hương, khu Suối Dọc, thôn Núi Bé, xã Xuân Mai.",-1,-0.5914627565787388,LIKELY_FALSE,7.07
+ thông tin kêu gọi quyên góp cho một trường hợp trẻ em cần phẫu thuật não tại Bệnh viện Đa khoa Bình Dương,-1,-0.6122327378817967,LIKELY_FALSE,6.2
+Biểu tình đòi phát vé ở Nhà hát Lớn,-1,-0.43071148432821155,LIKELY_FALSE,5.84
+Công an Hà Nội kiểm tra nồng độ cồn bằng máy giả ,-1,-0.37008940051159545,LIKELY_FALSE,5.94
+"cháu bé 6 tuổi tên Nguyễn Hoài Bảo Thi (trú tại xã Trường Sơn, huyện Quảng Ninh, tỉnh Quảng Bình, bị một người đàn ông lạ mặt bế lên xe và rời đi ngày 20/8/2025",-1,-0.10746047496795655,LIKELY_FALSE,6.74
+Tiktoker Phạm Thoại đăng tải bài viết và video tuyên bố được “vinh dự đảm nhận vai trò đại sứ chương trình Top nông sản - Nông sản về phố (VIETNAM OCOPEX 2025).,-1,-0.30928195336508374,LIKELY_FALSE,6.02
+" lúc hơn 14 giờ chiều 01/8, một bé trai ở Khu Bảo tồn thiên nhiên Kẻ Gỗ, giáp ranh giữa tỉnh Quảng Trị và tỉnh Hà Tĩnh trong lúc vui chơi trước nhà đã bị một người đàn ông và một người phụ nữ bắt cóc khiến gia đình rất hoang mang, đau khổ. Gia đình đã báo Công an địa phương, đồng thời đăng tải thông tin lên Facebook nhờ cộng đồng mạng chia sẽ để sớm tìm kiếm được con. ",-1,-0.3108788132667542,LIKELY_FALSE,6.12
+"anh N.T.T (SN 1980; trú ấp Thế Tứ, xã Thới Tam Thôn, huyện Hóc Môn; nay là ấp 105, xã Đông Thạnh) điều khiển xe ô tô chở 3 khách thuê xe lưu thông trên đường DT744 hướng từ phường Phú An đến phường Tây Nam.
+
+Khi đến địa bàn thuộc KP Dòng Sỏi, phường Tây Nam (cách trụ sở Ủy ban nhân dân phường Tây Nam khoảng 02km) thì anh T. bị 3 khách thuê dùng dây siết cổ để cướp xe. ",-1,-0.05306377272675003,LIKELY_FALSE,38.59
+"CSGT dừng xe tang giữa đường, bé gái bất ngờ chui ra từ quan tài ở Thanh Hóa",-1,-0.4686438908070364,LIKELY_FALSE,5.86
+trinh sát mật phục nhà xác Bệnh viện Bạch Mai,-1,-0.3539978543194857,LIKELY_FALSE,13.71
+"""bắt khẩn cấp một cán bộ cấp cao"" có liên quan đến vụ án người đàn ông dùng súng tự chế để bắn người khác rồi tự sát (xảy ra tại xã Vĩnh Xuân, huyện Trà Ôn, Vĩnh Long).",-1,-0.21503185870671507,LIKELY_FALSE,6.57
+Ngày 09.08.2024 món cháo lươn tỉnh Nghệ An đã được đưa vào Danh mục di sản quốc gia phi vật thể.,-1,0.8191839575767517,LIKELY_TRUE,5.95
+cô gái lây nhiễm HIV cho 16 người là nhân viên Công ty TNHH Samsung Electronics Việt Nam Thái Nguyên (Công ty Samsung),-1,-0.24234834633222438,LIKELY_FALSE,5.57
+Thông tin Lễ hội khinh khí cầu sẽ được tổ chức tại Quảng trường Võ Nguyên Giáp (TP Thái Nguyên) đúng dịp Tết Dương lịch 2024,-1,-0.7697660893201828,LIKELY_FALSE,6.08
+"Cuộc khám sức khỏe định kỳ của LG Display ngày hôm qua cho thấy hơn 30 nhân viên trong nhà máy mắc bệnh AIDS. Ước tính vẫn còn nhiều người chưa hoàn thành việc khám sức khỏe. Cuộc điều tra sơ bộ bắt đầu khi 4 người đẹp sống trong ký túc xá của công ty. 4 tiểu mỹ nhân sinh năm 2k, sống trong ký túc xá công ty và ngủ với nhiều người (cả Hàn lẫn Việt). Bây giờ công ty tiếp tục kiểm tra những nhân viên còn lại",-1,-0.3953940629959106,LIKELY_FALSE,5.89
+"""Nay hot clip về Bác sĩ nội trú, mình có em trai đang làm bác sĩ nội trú (bviện Bạch Mai) mình chia sẻ 1 số fact:
+
+Bệnh viện khác thì ko biết, chứ viện Bạch Mai đối xử với bsi nội trú siêu tệ, ko lương, ko trợ cấp, thậm chí gửi xe cũng bị bắt gửi khu bệnh nhân mất tiền (dù em mình ngồi khám và kê đơn cho bệnh nhân như bsi bình thường luôn)
+
+Bố mẹ mình nuôi 1 bác sĩ học hành đến nay là 9 năm bao tiền của, rất tốn kém (chưa kể còn tiền chạy việc vào viện nữa)""",-1,-0.25122936377806193,LIKELY_FALSE,6.74
+"Cần khẩn cấp chia sẻ tìm con trai Nguyễn Tuấn Khôi (6 tuổi) tại Đắk Lắk bị bắt cóc Khoảng 17h04 ngày 05/08/2025, con trai tôi là Nguyễn Tuấn Khôi, 6 tuổi, đã bị hai người đàn ông lạ mặt bắt cóc khi đang chơi trước nhà.
+
+Địa điểm xảy ra vụ việc: X. Cư Klông H. Krông Năng Đắk Lắk
+
+Đặc điểm nhận dạng của bé:
+
+Tên: Nguyễn Tuấn Khôi
+
+Tuổi: 6 tuổi
+
+Đang mặc áo như trong ảnh
+
+Thông tin về đối tượng:
+
+Hai người đàn ông lạ mặt, đeo khẩu trang.""",-1,-0.5455094180323861,LIKELY_FALSE,5.9
+"anh N.T.T (SN 1980; trú ấp Thế Tứ, xã Thới Tam Thôn, huyện Hóc Môn; nay là ấp 105, xã Đông Thạnh) điều khiển xe ô tô chở 3 khách thuê xe lưu thông trên đường DT744 hướng từ phường Phú An đến phường Tây Nam.
+
+Khi đến địa bàn thuộc KP Dòng Sỏi, phường Tây Nam (cách trụ sở Ủy ban nhân dân phường Tây Nam khoảng 02km) thì anh T. bị 3 khách thuê dùng dây siết cổ để cướp xe. ",-1,-0.21104595261049103,LIKELY_FALSE,6.26
+"thông tin bị can Nguyễn Phương Hằng được bảo lãnh về nhà hay chỉ bị phạt 1,5 triệu đồng",-1,-0.26659604547879634,LIKELY_FALSE,12.4
+vịnh Hạ Long có nguy cơ bị UNESCO thu hồi danh hiệu.,-1,-0.4687695248215868,LIKELY_FALSE,5.99
+"Mưa lớn kéo dài từ tối 3/12 đến sáng 4/12 khiến nhiều khu vực ở Lâm Đồng ngập sâu, có nơi nước dâng lên 2,5m, gây thiệt hại lớn về nhà cửa, sản xuất và giao thông.",1,0.6320025056027114,LIKELY_TRUE,5.63
+"Cơ quan công an đã tạm giữ hình sự Lê Bá Linh để điều tra hành vi đánh một nam tài xế, gây thương tích sau khi va chạm giao thông trên đường phố Hà Nội.",1,0.4702104112826104,LIKELY_TRUE,4.86
+"Trong quá trình ""thần đèn"" dịch chuyển ngôi nhà xây nhầm của ông Đỗ Văn Hữu (Hải Phòng), một ngôi mộ bất ngờ được phát hiện. Ngôi mộ này nằm trên lô đất khác của bà Loan",1,0.3481229707782651,LIKELY_TRUE,5.09
+UBND thành phố Đà Nẵng vừa yêu cầu dừng thi công dự án Capital Square 3 và yêu cầu báo cáo nguyên nhân vụ sụt lún đường Nguyễn Công Trứ trước ngày 6/12,1,0.5806976246918346,LIKELY_TRUE,5.05
+"Giá vàng hôm nay 4/12/2025 có diễn biến mới, SJC bất ngờ hạ 700.000 đồng/lượng lúc 13h07. Giá vàng nhẫn cũng giảm 600 nghìn đồng/lượng.",1,0.7460789330303669,LIKELY_TRUE,5.01
+" ngày 4/12, Tổ chức Giáo dục, Khoa học và Văn hoá của Liên hợp quốc (UNESCO) đã chính thức công bố 72 thành phố của 46 quốc gia được công nhận là thành viên Mạng lưới các Thành phố học tập toàn cầu của UNESCO, trong đó có Thủ đô Hà Nội của Việt Nam.",1,0.0,ERROR,94.04
+"Tối 4/12, lực lượng công an đã phong tỏa tuyến đường Quốc lộ 1A do ngập sâu đoạn qua địa bàn xã Hàm Thắng (Lâm Đồng).",1,0.6362852462509281,LIKELY_TRUE,67.18
+Tổng Bí thư Tô Lâm dự Hội nghị Đảng ủy Công an Trung ương năm 2025,1,0.49986862976585283,LIKELY_TRUE,6.04
+"Người dân xã Phú Trạch, tỉnh Quảng Trị (trước đây thuộc H.Quảng Trạch, Quảng Bình) vừa phát hiện một vết nứt dài xuất hiện trên QL1 đoạn qua khu vực Đèo Ngang. Vị trí xuất hiện vết nứt khá gần với nơi phát hiện giun đất chui lên mặt đất chết hàng loạt.",1,0.7113079970533197,LIKELY_TRUE,5.38
+Một giám đốc công ty xây dựng bị tuyên án chung thân với cáo buộc lừa đảo 78 tỉ đồng từ đôi vợ chồng đại gia.,1,0.5518921901782354,LIKELY_TRUE,5.21
+Tổ chức Phẫu thuật tiết niệu quốc tế (International Volunteer in Urology - IVUmed) vừa công nhận Bệnh viện Nhi đồng 1 (TP.HCM) là trung tâm niệu nhi xuất sắc đầu tiên tại Việt Nam.,1,0.7065822234984195,LIKELY_TRUE,4.87
+"Một tình huống mắc kẹt giữa rừng hy hữu, sáng nay 4.12, Công an xã Hàm Thạnh (tỉnh Lâm Đồng) đã triển khai cứu hộ thành công 6 nhân viên đo đạc dự án hồ Ka Pét do bị lũ chia cắt đường về.",1,0.8547229016528409,LIKELY_TRUE,4.98
+"Sở Xây dựng tỉnh Lâm Đồng vừa thông báo cấm tất cả các loại phương tiện lưu thông qua đèo Prenn từ 13 giờ ngày 4.12. Với đèo Mimosa, xe cộ được phép lưu thông từ 15 giờ 30 cùng ngày.",1,0.7119022507265389,LIKELY_TRUE,5.09
+"""Nay hot clip về Bác sĩ nội trú, mình có em trai đang làm bác sĩ nội trú (bviện Bạch Mai) mình chia sẻ 1 số fact:
+
+Bệnh viện khác thì ko biết, chứ viện Bạch Mai đối xử với bsi nội trú siêu tệ, ko lương, ko trợ cấp, thậm chí gửi xe cũng bị bắt gửi khu bệnh nhân mất tiền (dù em mình ngồi khám và kê đơn cho bệnh nhân như bsi bình thường luôn)
+
+Bố mẹ mình nuôi 1 bác sĩ học hành đến nay là 9 năm bao tiền của, rất tốn kém (chưa kể còn tiền chạy việc vào viện nữa)""",-1,-0.25122936377806193,LIKELY_FALSE,39.34
+"Cần khẩn cấp chia sẻ tìm con trai Nguyễn Tuấn Khôi (6 tuổi) tại Đắk Lắk bị bắt cóc Khoảng 17h04 ngày 05/08/2025, con trai tôi là Nguyễn Tuấn Khôi, 6 tuổi, đã bị hai người đàn ông lạ mặt bắt cóc khi đang chơi trước nhà.
+
+Địa điểm xảy ra vụ việc: X. Cư Klông H. Krông Năng Đắk Lắk
+
+Đặc điểm nhận dạng của bé:
+
+Tên: Nguyễn Tuấn Khôi
+
+Tuổi: 6 tuổi
+
+Đang mặc áo như trong ảnh
+
+Thông tin về đối tượng:
+
+Hai người đàn ông lạ mặt, đeo khẩu trang.""",-1,-0.44556674702513605,LIKELY_FALSE,38.7
+
+"""Nay hot clip về Bác sĩ nội trú, mình có em trai đang làm bác sĩ nội trú (bviện Bạch Mai) mình chia sẻ 1 số fact:
+
+Bệnh viện khác thì ko biết, chứ viện Bạch Mai đối xử với bsi nội trú siêu tệ, ko lương, ko trợ cấp, thậm chí gửi xe cũng bị bắt gửi khu bệnh nhân mất tiền (dù em mình ngồi khám và kê đơn cho bệnh nhân như bsi bình thường luôn)
+
+Bố mẹ mình nuôi 1 bác sĩ học hành đến nay là 9 năm bao tiền của, rất tốn kém (chưa kể còn tiền chạy việc vào viện nữa)""",-1,0.06480838348703273,LIKELY_TRUE,6.73
+"Cần khẩn cấp chia sẻ tìm con trai Nguyễn Tuấn Khôi (6 tuổi) tại Đắk Lắk bị bắt cóc Khoảng 17h04 ngày 05/08/2025, con trai tôi là Nguyễn Tuấn Khôi, 6 tuổi, đã bị hai người đàn ông lạ mặt bắt cóc khi đang chơi trước nhà.
+
+Địa điểm xảy ra vụ việc: X. Cư Klông H. Krông Năng Đắk Lắk
+
+Đặc điểm nhận dạng của bé:
+
+Tên: Nguyễn Tuấn Khôi
+
+Tuổi: 6 tuổi
+
+Đang mặc áo như trong ảnh
+
+Thông tin về đối tượng:
+
+Hai người đàn ông lạ mặt, đeo khẩu trang.""",-1,-0.42543027188096727,LIKELY_FALSE,5.76
+"anh N.T.T (SN 1980; trú ấp Thế Tứ, xã Thới Tam Thôn, huyện Hóc Môn; nay là ấp 105, xã Đông Thạnh) điều khiển xe ô tô chở 3 khách thuê xe lưu thông trên đường DT744 hướng từ phường Phú An đến phường Tây Nam.
+
+Khi đến địa bàn thuộc KP Dòng Sỏi, phường Tây Nam (cách trụ sở Ủy ban nhân dân phường Tây Nam khoảng 02km) thì anh T. bị 3 khách thuê dùng dây siết cổ để cướp xe. ",-1,-0.21104595261049103,LIKELY_FALSE,5.82
+"Từ tháng 11.2025, TP.HCM phát hiện chủng vi rút gây bệnh tay chân miệng nặng xuất hiện trở lại, nguy cơ gia tăng số ca nặng và tử vong.",1,0.31675984348223457,LIKELY_TRUE,5.64
+"Trong không khí trang nghiêm bên sông Thạch Hãn, Bộ Chỉ huy quân sự tỉnh Quảng Trị và phường Quảng Trị tổ chức lễ viếng và “Đêm hoa đăng” tri ân các anh hùng liệt sĩ.",1,0.5207459101310143,LIKELY_TRUE,6.11
+"Ngày 3.12, Phó chủ tịch UBND tỉnh Khánh Hòa Trần Hòa Nam chủ trì cuộc họp nghe Sở Xây dựng báo cáo kế hoạch đăng ký khởi công, khánh thành các dự án trọng điểm chào mừng Đại hội đại biểu toàn quốc lần thứ XIV của Đảng.",1,0.3841503858566284,LIKELY_TRUE,6.09
+"Đoàn Văn Sáng, cựu Đội phó Đội Quản lý thị trường số 4 (thuộc Chi cục Quản lý thị trường tỉnh Lạng Sơn), vừa bị khởi tố, bắt tạm giam với cáo buộc sát hại anh Nguyễn Xuân Đạt, quê Hưng Yên.",1,0.4681578178254384,LIKELY_TRUE,18.23
+"Chỉ trong một tuần, gia đình doanh nhân Johnathan Hạnh Nguyễn đã đóng góp tổng cộng 10 tỉ đồng hỗ trợ đồng bào miền Trung khắc phục hậu quả sau bão lũ, tiếp thêm nguồn lực để người dân sớm ổn định cuộc sống.",1,0.7126177797714869,LIKELY_TRUE,11.78
+"Ông Lê Trí Thanh tiếp tục được thống nhất hiệp thương giữ chức Chủ tịch Ủy ban MTTQ Việt Nam TP.Đà Nẵng lần thứ I, nhiệm kỳ 2025 - 2030.",1,0.6233183840910593,LIKELY_TRUE,19.07
+"Nhằm triển khai dự án Vành đai 4 TP.HCM trị giá hơn 120.000 tỉ đồng đúng tiến độ, UBND TP.HCM lập ban chỉ đạo do Chủ tịch Nguyễn Văn Được làm trưởng ban.",1,0.09257138208696555,LIKELY_TRUE,11.24
+"Trong đường dây cá độ bóng đá hàng nghìn tỉ đồng do Tạ Minh Cường cầm đầu, cảnh sát đã khởi tố 44 bị can và thu giữ nhiều tang vật để phục vụ điều tra.",1,0.46572580611383607,LIKELY_TRUE,18.27
+"Chiều 2.12, Văn phòng Quốc hội phối hợp các cơ quan tổ chức lễ khai trương Bảo tàng Quốc hội VN; công bố sách, ấn phẩm và phát hành Bộ tem bưu chính kỷ niệm 80 năm Quốc hội VN. Chủ tịch Quốc hội Trần Thanh Mẫn, Trưởng ban Chỉ đạo kỷ niệm 80 năm Quốc hội VN, dự và phát biểu chỉ đạo.",1,0.35811073959111217,LIKELY_TRUE,11.16
+"Ông Trần Văn Bảy, Phó chủ tịch UBND TP.HCM được giao phụ trách lĩnh vực quốc phòng, an ninh, nội chính, thay cho Phó chủ tịch Nguyễn Văn Thọ đã chuyển công tác.",1,0.536953649642291,LIKELY_TRUE,10.84
+"Ngày 2.12, Công an xã Sơn Hà (Quảng Ngãi) cho biết đơn vị vừa tiếp nhận và trao trả túi tiền chứa hơn 117 triệu đồng cho người đánh rơi, do một phụ nữ địa phương nhặt được.",1,0.549665120931772,LIKELY_TRUE,18.33
+"Cả nước có 146.839 người đã có quyết định nghỉ việc theo Nghị định 178, trong đó ở T.Ư 47.913 người và ở địa phương 98.926 người",1,-0.10440384437297956,LIKELY_FALSE,11.12
+"Tàu huấn luyện ROKS Hansando với 375 sĩ quan, thủy thủ do chuẩn đô đốc Hong Sang Yong chỉ huy đã cập cảng Tiên Sa (TP.Đà Nẵng), bắt đầu chuyến thăm tăng cường giao lưu quốc phòng và thắt chặt quan hệ Việt Nam - Hàn Quốc.",1,0.5479355743480107,LIKELY_TRUE,18.18
+3 cựu cán bộ công an bị đưa ra xét xử với cáo buộc nhận tiền để bỏ qua cho 4 cá nhân sử dụng ma túy tại quán karaoke.,1,0.30195600865250927,LIKELY_TRUE,11.05
+"Ngày 2.12, Bệnh viện Từ Dũ cơ sở 2 chính thức ra mắt tại Cần Giờ. Đây được xem là mô hình bệnh viện đa khoa liên kết đột phá đầu tiên tại Việt Nam.",1,0.05941280703390798,LIKELY_TRUE,19.1
+"Kết luận thanh tra mới nhất của tỉnh Lâm Đồng chỉ ra hàng loạt sai phạm tại dự án Sân golf Hòn Rơm, từ xây dựng không phép, điều chỉnh đất đai sai quy định đến chậm tiến độ suốt 13 năm 6 tháng.",1,0.5044765130912557,LIKELY_TRUE,10.97
+Quảng Trị: Giun đất trồi lên mặt đường rồi chết hàng loạt chưa rõ nguyên nhân,1,0.14338077289553788,LIKELY_TRUE,11.18
+"Trong lúc đào đất làm nền nhà, một người đàn ông tại Quảng Trị đã phát hiện quả bom lớn, nặng 340 kg, dài 1 m.",1,0.7116363978063738,LIKELY_TRUE,18.2
+"Hầm giữ xe của một thẩm mỹ viện lớn trên đường Nguyễn Đình Chiểu (TP.HCM) bất ngờ xảy ra vụ cháy, nghi phát ra từ một xe máy, chiều 29.11.",1,0.14865291654582943,LIKELY_TRUE,10.86
+Điều tàu hàng 200 tấn chặn lũ bảo vệ cầu đường sắt ở Lâm Đồng,1,0.24314042076468467,LIKELY_TRUE,11.11
+"Bờ biển Quảng Trị bị sạt lở nghiêm trọng, người dân sống trong âu lo",1,0.2595135037060925,LIKELY_TRUE,18.4
+"Sau nhiều giờ mưa lớn gây ngập sâu và sạt lở ta luy, chiều 4/12, giao thông trên các tuyến cao tốc Vĩnh Hảo - Phan Thiết và Phan Thiết - Dầu Giây đã được khôi phục hoàn toàn; phương tiện hiện lưu thông bình thường theo 2 chiều.",1,0.6683073228597641,LIKELY_TRUE,11.29
+"Thang cuốn lối số 5 ga Ba Son (tuyến metro số 1) phải tạm dừng hoạt động sau khi phát hiện mái kính thuộc tòa nhà Saigon Marina bị nứt, không đảm bảo an toàn cho hành khách.",1,0.4395299363918978,LIKELY_TRUE,18.15
+"Rạng sáng 4/12, nước lũ kết hợp mưa lớn từ tối 3/12 khiến nước dâng cao trên Quốc lộ 1- khu vực gần ngã ba Gộp thuộc xã Hồng Sơn (khu vực huyện Hàm Thuận Bắc, tỉnh Bình Thuận cũ) và nhiều tàu thuyền bị nước cuốn trôi.",1,0.8187378108501434,LIKELY_TRUE,11.3
+"Thủ tướng Chính phủ Phạm Minh Chính vừa ký văn bản số 1551 ngày 3/12/2025 về việc báo cáo tiến độ, kết quả thực hiện ""Chiến dịch Quang Trung"" xây dựng, sửa chữa nhà cho Nhân dân sau bão, lũ.",1,0.47058483095194475,LIKELY_TRUE,19.21
+"Thủ tướng Phạm Minh Chính và Thủ tướng Lào đồng chủ trì Kỳ họp lần thứ 48 Ủy ban Liên Chính phủ Việt Nam-Lào, đánh giá hợp tác song phương giai đoạn 2021-2025, hướng tới 2026-2030.",1,0.5519553464034508,LIKELY_TRUE,11.64
+"Bộ Chính trị quyết định ông Quản Minh Cường thôi tham gia BCH, Ban Thường vụ, thôi giữ chức Bí thư Tỉnh ủy Cao Bằng, chỉ định tham gia BCH, Ban Thường vụ, giữ chức Bí thư Tỉnh ủy Quảng Ninh",1,-0.1372877655194582,LIKELY_FALSE,11.23
+"Trận mưa lớn kéo dài khoảng 2 giờ đồng hồ trong chiều 2/12 đã khiến một đoạn Quốc lộ 27 qua xã D’ran bị ngập sâu hơn 0,5 m, nhiều phương tiện không thể lưu thông.",1,0.3474429536369486,LIKELY_TRUE,18.46
+"Một vụ hỏa hoạn xảy ra vào rạng sáng ngày 2/12 tại một căn nhà ở hẻm đường Liên ấp 2-6, xã Vĩnh Lộc, thành phố Hồ Chí Minh, đã khiến một bé gái 8 tuổi tử vong và ba người khác bị thương. ",1,0.621022983783362,LIKELY_TRUE,11.05
+"Sáng 2/12/2025, tại thủ đô Vientiane, Tổng Bí thư Tô Lâm và Phu nhân dự Lễ kỷ niệm 50 năm Quốc khánh nước CHDCND Lào (2/12/1975 - 2/12/2025) và kỷ niệm 105 năm Ngày sinh Chủ tịch Kaysone Phomvihane.",1,0.5741838216781616,LIKELY_TRUE,19.71
+"Chiều 1/12, một vụ cháy lớn xảy ra tại khu vực kho bãi ở thôn Thạch Nham Đông, xã Bà Nà (TP Đà Nẵng). Ngọn lửa bùng phát dữ dội, nhanh chóng lan rộng.",1,0.4249723818934634,LIKELY_TRUE,10.95
+
+"""Nay hot clip về Bác sĩ nội trú, mình có em trai đang làm bác sĩ nội trú (bviện Bạch Mai) mình chia sẻ 1 số fact:
+
+Bệnh viện khác thì ko biết, chứ viện Bạch Mai đối xử với bsi nội trú siêu tệ, ko lương, ko trợ cấp, thậm chí gửi xe cũng bị bắt gửi khu bệnh nhân mất tiền (dù em mình ngồi khám và kê đơn cho bệnh nhân như bsi bình thường luôn)
+
+Bố mẹ mình nuôi 1 bác sĩ học hành đến nay là 9 năm bao tiền của, rất tốn kém (chưa kể còn tiền chạy việc vào viện nữa)""",-1,-0.39406880137762895,LIKELY_FALSE,6.33
+"Cần khẩn cấp chia sẻ tìm con trai Nguyễn Tuấn Khôi (6 tuổi) tại Đắk Lắk bị bắt cóc Khoảng 17h04 ngày 05/08/2025, con trai tôi là Nguyễn Tuấn Khôi, 6 tuổi, đã bị hai người đàn ông lạ mặt bắt cóc khi đang chơi trước nhà.
+
+Địa điểm xảy ra vụ việc: X. Cư Klông H. Krông Năng Đắk Lắk
+
+Đặc điểm nhận dạng của bé:
+
+Tên: Nguyễn Tuấn Khôi
+
+Tuổi: 6 tuổi
+
+Đang mặc áo như trong ảnh
+
+Thông tin về đối tượng:
+
+Hai người đàn ông lạ mặt, đeo khẩu trang.""",-1,-0.4596531988731746,LIKELY_FALSE,5.82
+"anh N.T.T (SN 1980; trú ấp Thế Tứ, xã Thới Tam Thôn, huyện Hóc Môn; nay là ấp 105, xã Đông Thạnh) điều khiển xe ô tô chở 3 khách thuê xe lưu thông trên đường DT744 hướng từ phường Phú An đến phường Tây Nam.
+
+Khi đến địa bàn thuộc KP Dòng Sỏi, phường Tây Nam (cách trụ sở Ủy ban nhân dân phường Tây Nam khoảng 02km) thì anh T. bị 3 khách thuê dùng dây siết cổ để cướp xe. ",-1,-0.29628532119016343,LIKELY_FALSE,6.12
+"Hai người đàn ông tử vong trong tư thế quỳ trên đệm tại một ngôi nhà ở xã Bình Minh (Hà Nội), bên cạnh có kim tiêm.",1,0.11140757387405946,LIKELY_TRUE,5.76
+"Nhà máy Bia Hà Nội Habeco ở đường Hoàng Hoa Thám bốc cháy dữ dội lúc sáng 1/12, lực lượng chức năng đang nỗ lực dập lửa.",1,0.5894636428991663,LIKELY_TRUE,5.81
+"Tòa nhà thẩm mỹ viện 6 tầng trên đường Nguyễn Đình Chiểu bất ngờ bốc cháy vào chiều 29/11. Đám cháy được khống chế trong vòng 30 phút, không gây thương vong về người.",1,0.4983675405069401,LIKELY_TRUE,6.03
+"Sáng 29/11, ông Nguyễn Phước Lộc, Phó bí thư Thành ủy, được tín nhiệm hiệp thương tiếp tục giữ chức Chủ tịch Ủy ban MTTQ Việt Nam khóa I, nhiệm kỳ 2025-2030.",1,0.5165453437256486,LIKELY_TRUE,12.39
+"Trong ngày 28/11, TP.HCM liên tiếp xảy ra hai vụ cháy tại kho phụ tùng ô tô ở phường Tăng Nhơn Phú và bãi xe xã Bình Hưng, nhiều tài sản bị thiêu rụi.",1,0.7234645485877991,LIKELY_TRUE,18.38
+"Dự báo thời tiết 29/11, Hà Nội rét sâu về đêm và sáng, nhiệt độ thấp nhất có thể xuống ngưỡng 11-13°C; cùng thời điểm này TP.HCM trời lạnh, ban ngày đón nắng",1,0.3602375129461288,LIKELY_TRUE,11.04
+"Đám cháy bùng phát dữ dội từ khoảng 19h ngày 27/11, xuất phát từ xưởng sản xuất bỉm rồi lan rộng. Ước tính thiệt hại ban đầu hàng trăm tỷ đồng.",1,0.430884567949968,LIKELY_TRUE,18.6
+"Nữ sinh lớp 9 Trường THCS Quảng Xuân (xã Quảng Trạch, tỉnh Quảng Trị) đang trong giờ học thể dục thì ngã quỵ dù lập tức được đưa cấp cứu nhưng không qua khỏi.",1,0.5338944244291145,LIKELY_TRUE,6.56
+"Thi thể ông L.V.N, Chánh Văn phòng Đảng ủy xã Trung Thành (Thanh Hóa), được phát hiện nổi trên sông Mã, cách vị trí ông này gặp nạn 25 km.",1,0.4958816197664295,LIKELY_TRUE,5.85
+"Trong lúc phân loại quần áo gửi đồng bào vùng lũ tại Cung Văn hóa Lao động TP.HCM, một nam sinh Đại học Văn Lang bất ngờ thấy miếng vàng 5 chỉ rơi ra từ túi đồ cũ.",1,0.09577859044075011,LIKELY_TRUE,7.11
+"Một bé gái sơ sinh được quấn trong khăn, đặt bên ven đường có cỏ mọc um tùm, sát mép nước thuộc khu dân cư Hương Lộ 5 (phường An Lạc, TP.HCM) và may mắn được người dân phát hiện.",1,0.47501536302945835,LIKELY_TRUE,6.12
+"Từ 1/7/2026, Hà Nội thực hiện vùng phát thải thấp thí điểm tại một số khu vực trong Vành đai 1 gồm 9 phường nội đô.",1,0.4924065977815658,LIKELY_TRUE,5.76

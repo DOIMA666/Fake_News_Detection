@@ -19,7 +19,7 @@ class DatabaseManager:
     def get_connection(self):
         """Context manager để quản lý kết nối database"""
         conn = sqlite3.connect(self.db_path)
-        conn.row_factory = sqlite3.Row  # Trả về object Row để truy cập bằng tên cột
+        conn.row_factory = sqlite3.Row  
         try:
             yield conn
             conn.commit()
@@ -55,7 +55,9 @@ class DatabaseManager:
                     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                     
                     -- Feedback
-                    user_feedback TEXT CHECK(user_feedback IN ('CORRECT', 'INCORRECT'))
+                    user_feedback TEXT CHECK(user_feedback IN ('CORRECT', 'INCORRECT')),
+                    
+                    full_result_json TEXT
                 )
             """)
 
@@ -90,14 +92,13 @@ class DatabaseManager:
             """)
             
             cursor.execute("INSERT OR IGNORE INTO statistics (id) VALUES (1)")
-            print(f"✅ Database initialized: {self.db_path}")
+            print(f"Database initialized: {self.db_path}")
     
     def add_check(self, check_data: Dict) -> int:
         """Thêm 1 lần kiểm tra vào database"""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
-            # Parse dữ liệu
             verdict = check_data.get('verdict', {})
             voting = check_data.get('voting_summary', {}) 
             keywords = check_data.get('keywords', [])
@@ -108,14 +109,17 @@ class DatabaseManager:
             elif 'category' in check_data:
                 category = check_data['category']
             
-            # Insert đầy đủ cột
+            full_result_obj = check_data.get('full_result', check_data)
+            full_result_str = json.dumps(full_result_obj, ensure_ascii=False)
+
             cursor.execute("""
                 INSERT INTO check_history (
                     content_preview, input_type, verdict_code, verdict_label,
                     confidence_percentage, category, num_references, timestamp,
-                    total_score, support_count, refute_count, discuss_count
+                    total_score, support_count, refute_count, discuss_count,
+                    full_result_json
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 check_data.get('content_preview', '')[:500],
                 check_data.get('input_type', 'text'),
@@ -129,19 +133,18 @@ class DatabaseManager:
                 voting.get('total_score', 0),
                 voting.get('support_count', 0),
                 voting.get('refute_count', 0),
-                voting.get('discuss_count', 0)
+                voting.get('discuss_count', 0),
+                full_result_str
             ))
             
             check_id = cursor.lastrowid
             
-            # Insert keywords
             for idx, kw in enumerate(keywords[:15]):
                 cursor.execute("""
                     INSERT INTO keywords (check_id, keyword, position)
                     VALUES (?, ?, ?)
                 """, (check_id, kw[:100], idx))
             
-            # Cập nhật statistics
             self._update_statistics(cursor, verdict.get('code', 'UNCERTAIN'))
             
             return check_id
@@ -191,7 +194,6 @@ class DatabaseManager:
                     "uncertain": 0, "todayChecks": 0, "accuracy": 0.0
                 }
             
-            # Tính Accuracy từ Feedback
             cursor.execute("SELECT COUNT(*) FROM check_history WHERE user_feedback IS NOT NULL")
             total_feedback = cursor.fetchone()[0]
             
@@ -202,7 +204,6 @@ class DatabaseManager:
             if total_feedback > 0:
                 real_accuracy = (positive_feedback / total_feedback) * 100
             
-            # Đếm checks hôm nay
             cursor.execute("""
                 SELECT COUNT(*) as today_count
                 FROM check_history
@@ -224,15 +225,14 @@ class DatabaseManager:
     def get_recent_checks(self, limit: int = 10) -> List[Dict]:
         """
         Lấy các lần kiểm tra gần nhất.
-        ✅ ĐÃ SỬA LỖI: Dùng cú pháp row['key'] thay vì row.get()
         """
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
-            # Lấy tất cả các cột cần thiết
             cursor.execute("""
                 SELECT id, content_preview, verdict_code, verdict_label,
-                       confidence_percentage, timestamp, input_type, num_references
+                       confidence_percentage, timestamp, input_type, num_references,
+                       full_result_json
                 FROM check_history
                 ORDER BY timestamp DESC
                 LIMIT ?
@@ -240,7 +240,6 @@ class DatabaseManager:
             
             results = []
             for row in cursor.fetchall():
-                # Tính time ago an toàn
                 try:
                     timestamp = datetime.fromisoformat(row['timestamp'])
                     delta = datetime.now() - timestamp
@@ -255,8 +254,15 @@ class DatabaseManager:
                         time_ago = "Vừa xong"
                 except:
                     time_ago = ""
+                
+                full_result = None
+                if row['full_result_json']:
+                    try:
+                        full_result = json.loads(row['full_result_json'])
+                        full_result['db_id'] = row['id']
+                    except:
+                        pass
 
-                # ✅ FIX Ở ĐÂY: Truy cập trực tiếp index, dùng 'or' để xử lý NULL
                 results.append({
                     "id": row['id'],
                     "title": (row['content_preview'] or "")[:60] + "...",
@@ -266,7 +272,8 @@ class DatabaseManager:
                     "input_type": row['input_type'] or 'text',
                     "num_references": row['num_references'] or 0,
                     "time": time_ago,
-                    "timestamp": row['timestamp']
+                    "timestamp": row['timestamp'],
+                    "result": full_result
                 })
             
             return results
@@ -317,7 +324,7 @@ class DatabaseManager:
                 UPDATE statistics SET 
                 total_checks = 0, true_news = 0, false_news = 0, uncertain = 0
             """)
-            print("🗑️ Database cleared")
+            print("Database cleared")
             
     def export_to_json(self, output_path: str = "backup.json"):
         """Xuất database ra file JSON"""
@@ -328,13 +335,12 @@ class DatabaseManager:
                 SELECT * FROM check_history ORDER BY timestamp DESC
             """)
             
-            # Convert row objects to dicts
             data = [dict(row) for row in cursor.fetchall()]
             
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
             
-            print(f"💾 Exported {len(data)} records to {output_path}")
+            print(f"Exported {len(data)} records to {output_path}")
 
 
 if __name__ == "__main__":

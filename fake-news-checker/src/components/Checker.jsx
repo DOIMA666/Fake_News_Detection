@@ -17,7 +17,7 @@ const Checker = ({
   saveResult, 
   shareResult, 
   exportResult,
-  apiURL // ✅ Nhận prop mới
+  apiURL 
 }) => {
   return (
     <div className="space-y-6 md:space-y-8">
@@ -139,7 +139,7 @@ const Checker = ({
         saveResult={saveResult}
         shareResult={shareResult}
         exportResult={exportResult}
-        apiURL={apiURL} // ✅ Truyền xuống để gọi feedback
+        apiURL={apiURL} 
       />
     </div>
   );

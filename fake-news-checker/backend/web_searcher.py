@@ -1,4 +1,3 @@
-# web_searcher.py
 import hashlib
 import logging
 import time
@@ -40,24 +39,16 @@ class SmartCache:
 
 
 class EnhancedWebSearcher:
-    """
-    Web Searcher Optimized (Groq-Ready):
-    - Nhận Query trực tiếp từ AI Preprocessor.
-    - Parallel Search.
-    - Meta Description Enrichment.
-    - API Key Rotation.
-    """
 
     def __init__(
         self,
-        google_api_keys: List[str] = None,  # Nhận vào 1 List các key
+        google_api_keys: List[str] = None,  
         google_cse_id: Optional[str] = None,
         cache_enabled: bool = True,
     ):
-        # Lưu danh sách key
         self.api_keys = google_api_keys if google_api_keys else []
         self.google_cse_id = google_cse_id
-        self.current_key_index = 0  # Chỉ mục key hiện tại
+        self.current_key_index = 0  
 
         self.cache = SmartCache(ttl_hours=24) if cache_enabled else None
 
@@ -89,9 +80,8 @@ class EnhancedWebSearcher:
         if not queries_from_ai:
             return []
 
-        # Chỉ cần lọc trùng và giới hạn số lượng
         unique_queries = list(dict.fromkeys(queries_from_ai))
-        return unique_queries[:3]  # Lấy 3 query tốt nhất
+        return unique_queries[:3] 
 
     def search_google_custom_api(
         self, query: str, num_results: int = 10
@@ -104,7 +94,6 @@ class EnhancedWebSearcher:
 
         url = "https://www.googleapis.com/customsearch/v1"
 
-        # Thử tối đa bằng số lượng key mình có
         max_retries = len(self.api_keys)
 
         for attempt in range(max_retries):
@@ -122,7 +111,6 @@ class EnhancedWebSearcher:
             try:
                 response = requests.get(url, params=params, timeout=10)
 
-                # Nếu thành công (200 OK)
                 if response.status_code == 200:
                     data = response.json()
                     results = []
@@ -131,7 +119,6 @@ class EnhancedWebSearcher:
                             link = item.get("link", "")
                             domain = urlparse(link).netloc.replace("www.", "")
 
-                            # --- LOGIC CHỌN CONTENT (SNIPPET vs META) ---
                             snippet = item.get("snippet", "")
                             meta_desc = ""
 
@@ -152,7 +139,6 @@ class EnhancedWebSearcher:
                                     final_content = meta_desc
 
                             final_content = final_content.replace("\n", " ").strip()
-                            # ------------------------------------------------
 
                             results.append(
                                 {
@@ -244,7 +230,6 @@ class EnhancedWebSearcher:
                     logger.error(f"    ✗ Query generated exception: {exc}")
         # --- KẾT THÚC XỬ LÝ SONG SONG ---
 
-        # Deduplicate
         unique_results = {}
         for result in all_results:
             url = result["url"]
@@ -259,5 +244,4 @@ class EnhancedWebSearcher:
         return final_results
 
 
-# Backward compatibility
 WebSearcher = EnhancedWebSearcher

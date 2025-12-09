@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Bookmark, Share2, Download, Target, CheckCircle, AlertCircle, Info, Shield, Globe, ExternalLink, ThumbsUp, ThumbsDown, MessageSquare, XCircle } from 'lucide-react';
 
-// Mock helper functions
 const getVerdictConfig = (code) => {
   const configs = {
     'LIKELY_TRUE': {
@@ -65,7 +64,7 @@ const getStanceConfig = (code) => {
       badge: 'bg-gray-100 text-gray-700 border-gray-200'
     }
   };
-  // Handle case-insensitive matching safely
+
   const safeCode = (code || '').toLowerCase();
   return configs[safeCode] || configs['unrelated'];
 };
@@ -87,7 +86,6 @@ const CheckerResult = ({ result, showResult, saveResult, shareResult, exportResu
   
   const [feedbackStatus, setFeedbackStatus] = useState(getInitialFeedbackStatus);
   
-  // Nếu không có kết quả thì không render gì cả (tránh lỗi render bên dưới)
   if (!result || !result.verdict) return null;
 
   const verdictConfig = getVerdictConfig(result.verdict.code);
@@ -102,7 +100,7 @@ const CheckerResult = ({ result, showResult, saveResult, shareResult, exportResu
     setFeedbackStatus('submitting');
     try {
       
-      const baseUrl = apiURL || 'http://localhost:8000';
+      const baseUrl = apiURL;
       
       await fetch(`${baseUrl}/api/feedback`, {
         method: 'POST',
@@ -113,7 +111,6 @@ const CheckerResult = ({ result, showResult, saveResult, shareResult, exportResu
         })
       });
       
-      // Save feedback status to localStorage
       const key = getFeedbackKey();
       if (key) {
         localStorage.setItem(key, 'submitted');
@@ -122,7 +119,7 @@ const CheckerResult = ({ result, showResult, saveResult, shareResult, exportResu
       setTimeout(() => setFeedbackStatus('submitted'), 500);
     } catch (err) {
       console.error("Lỗi gửi feedback:", err);
-      // Vẫn lưu state để UI không bị treo
+
       const key = getFeedbackKey();
       if (key) {
         localStorage.setItem(key, 'submitted');
