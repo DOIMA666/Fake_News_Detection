@@ -73,7 +73,8 @@ Time: ~2-3 seconds (vs 30s sequential)
 
 #### 5. **Weighted Voting Mechanism**
 ```python
-Weighted Score = Credibility(40%) + Stance_Confidence(30%) + Similarity(30%)
+Weighted Score = Credibility * Stance_Confidence * Similarity
+
 ```
 
 ### 💻 User Experience
@@ -90,7 +91,7 @@ Weighted Score = Credibility(40%) + Stance_Confidence(30%) + Similarity(30%)
 
 | Metric | Value |
 |--------|-------|
-| Average Response Time | < 5 seconds |
+| Average Response Time | < 10 seconds |
 | Concurrent Requests | 10+ |
 | Database Records Capacity | Unlimited (SQLite) |
 | Cache Hit Rate | ~70% |
@@ -456,7 +457,7 @@ fake-news-checker/
 ### Benchmark Script
 
 ```bash
-python backend/benchmark.py
+python backend/test_performance.py
 ```
 
 Đánh giá hệ thống trên test set với metrics:
@@ -468,20 +469,50 @@ python backend/benchmark.py
 ### Sample Test Results
 
 ```
-📊 EVALUATION REPORT
+📊 PERFORMANCE TEST SUMMARY v2.1
 ====================================
-Total Samples: 50
-Valid Samples: 48
-Failed: 2
+OVERALL METRICS:
+  • Total Tests: 211
+  • Correct: 185 ✅
+  • Incorrect: 16 ❌
+  • Errors: 10 ⚠️
+  • Rate Limit Errors: 0 🚫
+  • Accuracy: 92.04% (on 201 successful tests)
+  • Avg Time/Test: 6.55s
 
-Accuracy: 85.4%
-Avg Latency: 4.2s
-Avg Confidence: 78.5%
+📂 ACCURACY BY CATEGORY:
+  • CRIME: 90.5% (19/21)
+  • HEALTH: 100.0% (14/14)
+  • OTHER: 89.9% (116/129)
+  • POLITICS: 100.0% (6/6)
+  • TECHNOLOGY: 96.8% (30/31)
 
-🎯 PER-CLASS METRICS:
-TRUE: Precision: 88.2% | Recall: 90.0% | F1: 89.1%
-FALSE: Precision: 82.5% | Recall: 80.0% | F1: 81.2%
-UNCERTAIN: Precision: 75.0% | Recall: 70.0% | F1: 72.4%
+🎯 CONFUSION MATRIX:
+
+Actual →       LIKELY_TRUE    LIKELY_FALSE   UNCERTAIN
+Expected ↓     ------------------------------------------------------------
+LIKELY_TRUE    99             0              1
+LIKELY_FALSE   9              86             6
+UNCERTAIN      0              0              0
+
+💪 CONFIDENCE ANALYSIS:
+  • LIKELY_FALSE:
+    - Average: 79.8%
+    - Range: 71.3% - 90.4%
+    - Std Dev: 4.5%
+  • UNCERTAIN:
+    - Average: 50.0%
+    - Range: 50.0% - 50.0%
+    - Std Dev: 0.0%
+  • LIKELY_TRUE:
+    - Average: 82.6%
+    - Range: 71.9% - 94.6%
+    - Std Dev: 4.6%
+
+====================================
+📝 EVALUATION:
+🌟 EXCELLENT: System accuracy is 92.0% (201 successful tests)
+
 ```
 
 ---
