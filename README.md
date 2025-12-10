@@ -74,7 +74,10 @@ Time: ~2-3 seconds (vs 30s sequential)
 #### 5. **Weighted Voting Mechanism**
 ```python
 E = Credibility * Stance_Confidence * Similarity
-S![formula](https://latex.codecogs.com/png.latex?\text{SystemScore}=\frac{\sum(E_i\times\text{Credibility}_i)}{\sum\text{Credibility}_i})
+
+SystemScore =  
+![formula](https://latex.codecogs.com/png.latex?\text{SystemScore}=\frac{\sum(E_i\times\text{Credibility}_i)}{\sum\text{Credibility}_i})
+
 ```
 
 ### 💻 User Experience
